@@ -137,19 +137,22 @@ html,body{height:100%;overflow:hidden;font-family:var(--sans);background:var(--b
 @media(max-width:600px){.two-col,.three-col{grid-template-columns:1fr}}
 
 /* ── TAB: SKETCH ── */
-.sketch-wrap{display:flex;flex-direction:column;height:100%;min-height:0}
-.sketch-tb{padding:8px 14px;border-bottom:1px solid var(--border);background:var(--card);display:flex;align-items:center;gap:4px;flex-wrap:wrap;flex-shrink:0}
-.stb{width:36px;height:36px;border-radius:9px;border:1px solid transparent;background:transparent;cursor:pointer;color:var(--text3);display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0}
+.sketch-wrap{display:flex;flex-direction:column;height:100%;min-height:0;position:relative}
+.sketch-tb{padding:6px 10px;border-bottom:1px solid var(--border);background:var(--card);display:flex;align-items:center;gap:3px;flex-wrap:nowrap;flex-shrink:0;overflow-x:auto}
+.sketch-tb::-webkit-scrollbar{height:0}
+.stb{width:36px;height:36px;border-radius:9px;border:1px solid transparent;background:transparent;cursor:pointer;color:var(--text3);display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0;position:relative}
 .stb svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .stb:hover{background:var(--bg);color:var(--text2);border-color:var(--border)}
 .stb.on{background:var(--blue-lt);color:var(--blue);border-color:var(--blue-bd)}
-.stb-sep{width:1px;height:22px;background:var(--border);margin:0 4px}
-.s-cpick{width:28px;height:28px;border-radius:7px;border:1px solid var(--border-md);cursor:pointer;padding:0;flex-shrink:0}
-.s-wsel{background:var(--bg);border:1px solid var(--border);color:var(--text2);font-size:11px;padding:5px 7px;border-radius:7px;cursor:pointer;outline:none;font-family:var(--mono)}
-.s-wsel option{background:var(--card)}
-.sketch-hint{font-size:11px;color:var(--text3);padding:5px 14px;background:var(--card);border-top:1px solid var(--border);flex-shrink:0;font-family:var(--mono)}
-svg.draw-svg{flex:1;display:block;width:100%;background:#fafbfc;cursor:crosshair;min-height:0;touch-action:none}
-/* node handles rendered as SVG circles — styled via attrs, no CSS needed */
+.stb-sep{width:1px;height:22px;background:var(--border);margin:0 3px;flex-shrink:0}
+.s-cpick{width:26px;height:26px;border-radius:6px;border:1px solid var(--border-md);cursor:pointer;padding:0;flex-shrink:0}
+.s-wsel{background:var(--bg);border:1px solid var(--border);color:var(--text2);font-size:11px;padding:4px 6px;border-radius:7px;cursor:pointer;outline:none;font-family:var(--mono);flex-shrink:0}
+.sketch-status{font-size:11px;color:var(--text3);padding:4px 12px;background:var(--card);border-top:1px solid var(--border);flex-shrink:0;font-family:var(--mono);min-height:24px}
+.chart-canvas{flex:1;display:block;width:100%;min-height:0;touch-action:none;cursor:crosshair}
+.ex-chart-canvas{display:block;width:100%;height:220px;touch-action:none;cursor:crosshair}
+.ex-sketch-area{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:#fafbfc}
+.ex-sketch-tb{padding:5px 8px;border-bottom:1px solid var(--border);background:var(--card);display:flex;gap:3px;align-items:center;overflow-x:auto}
+.ex-sketch-tb::-webkit-scrollbar{height:0}
 
 /* ── TAB: RULES ── */
 .rules-panel{padding:20px 24px;display:flex;flex-direction:column;gap:10px}
@@ -555,348 +558,423 @@ Don't copy from books — write it the way you understand it. The goal is that w
 }
 
 // ─── DRAWING ENGINE ──────────────────────────────────────────────
-// Shared by main sketch and each example canvas.
-// Tools: path (tap to add nodes, lift and re-tap to continue),
-//        trendline (2 nodes, drag either endpoint),
-//        rect (drag to draw, drag any of 4 corners to resize).
-// Nodes are always visible and draggable. No arrowheads.
+// Professional Canvas 2D drawing system — Stage 1
+// TradingView-style: Trendline, Path, Rectangle
+// Price/time coordinate space, draggable handles, undo/redo
 
-const NODE_R = 7;       // hit radius for touch (larger = easier to grab)
-const NODE_VISUAL_R = 5; // visual radius of handle circle
+const HIT_R      = 12;   // touch hit tolerance px
+const HANDLE_R   = 5.5;  // visual handle radius
+const HANDLE_HIT = 14;   // handle touch hit radius
+const GRID_CLR   = 'rgba(10,20,40,.06)';
+const AXIS_CLR   = 'rgba(10,20,40,.4)';
+const AXIS_BG    = '#f0f2f5';
+const CVS_BG     = '#fafbfc';
+const PRICE_W    = 54;
+const TIME_H     = 20;
+const SEL_CLR    = '#3b6ef0';
 
-// Shape store per canvas id: { shapes:[], tool, color, strokeW }
-const canvasState = {};
+class DrawingChart {
+  constructor(canvas, jsonData) {
+    this.cv      = canvas;
+    this.ctx     = canvas.getContext('2d');
+    this.drawings= jsonData ? JSON.parse(jsonData) : [];
+    this.tool    = 'trendline';
+    this.color   = '#ef5350';
+    this.sw      = 2;
+    this.ls      = 'solid';
+    this.selId   = null;
+    this.hoverId = null;
+    this.dragCtx = null;
+    this.ds      = null;   // draw state
+    this.hist    = [];
+    this.fut     = [];
+    this._dirty  = true;
+    this._raf    = null;
+    this.vp      = {pMin:0,pMax:100,tMin:0,tMax:100};
+    this._resize();
+    this._bind();
+    this._loop();
+  }
 
-function getCS(id) {
-  if (!canvasState[id]) canvasState[id] = { shapes: [], tool: 'path', color: '#3b6ef0', strokeW: 2 };
-  return canvasState[id];
-}
+  get W(){ return this.cv.width/(window.devicePixelRatio||1); }
+  get H(){ return this.cv.height/(window.devicePixelRatio||1); }
+  get dW(){ return this.W - PRICE_W; }
+  get dH(){ return this.H - TIME_H; }
 
-// ── Serialise / deserialise (we store shapes as JSON not SVG innerHTML) ──
-function serialiseCanvas(id) {
-  return JSON.stringify(getCS(id).shapes);
-}
-function deserialiseCanvas(id, json) {
-  try { getCS(id).shapes = json ? JSON.parse(json) : []; } catch { getCS(id).shapes = []; }
-}
+  toP(cx,cy){
+    const v=this.vp;
+    return{x:(cx-v.tMin)/(v.tMax-v.tMin)*this.dW,
+           y:(v.pMax-cy)/(v.pMax-v.pMin)*this.dH};
+  }
+  fromP(px,py){
+    const v=this.vp;
+    return{x:px/this.dW*(v.tMax-v.tMin)+v.tMin,
+           y:v.pMax-py/this.dH*(v.pMax-v.pMin)};
+  }
 
-// ── Render all shapes onto an SVG element ──────────────────────────
-function renderCanvas(id) {
-  const svgEl = document.getElementById(id);
-  if (!svgEl) return;
-  const cs = getCS(id);
-  // clear non-grid children
-  [...svgEl.children].forEach(c => { if (!c.classList.contains('sk-grid') && !c.classList.contains('ex-grid')) c.remove(); });
+  _resize(){
+    const dpr=window.devicePixelRatio||1;
+    const r=this.cv.getBoundingClientRect();
+    if(!r.width) return;
+    this.cv.width=r.width*dpr; this.cv.height=r.height*dpr;
+    this.ctx.scale(dpr,dpr);
+    this._dirty=true;
+  }
 
-  cs.shapes.forEach((sh, si) => {
-    if (sh.type === 'path') {
-      if (sh.pts.length < 2) return;
-      const path = mkEl('polyline');
-      path.setAttribute('points', sh.pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' '));
-      path.setAttribute('fill', 'none');
-      path.setAttribute('stroke', sh.color);
-      path.setAttribute('stroke-width', sh.strokeW);
-      path.setAttribute('stroke-linecap', 'round');
-      path.setAttribute('stroke-linejoin', 'round');
-      svgEl.appendChild(path);
-      // nodes
-      sh.pts.forEach((p, pi) => {
-        const c = makeNode(p.x, p.y, sh.color, id, si, pi);
-        svgEl.appendChild(c);
-      });
-    } else if (sh.type === 'trendline') {
-      const line = mkEl('line');
-      line.setAttribute('x1', sh.x1); line.setAttribute('y1', sh.y1);
-      line.setAttribute('x2', sh.x2); line.setAttribute('y2', sh.y2);
-      line.setAttribute('stroke', sh.color);
-      line.setAttribute('stroke-width', sh.strokeW);
-      line.setAttribute('stroke-linecap', 'round');
-      svgEl.appendChild(line);
-      // 2 endpoint nodes
-      [[sh.x1, sh.y1, 0], [sh.x2, sh.y2, 1]].forEach(([x, y, ni]) => {
-        svgEl.appendChild(makeNode(x, y, sh.color, id, si, ni));
-      });
-    } else if (sh.type === 'rect') {
-      const rx = Math.min(sh.x1, sh.x2), ry = Math.min(sh.y1, sh.y2);
-      const rw = Math.abs(sh.x2 - sh.x1), rh = Math.abs(sh.y2 - sh.y1);
-      const rect = mkEl('rect');
-      rect.setAttribute('x', rx); rect.setAttribute('y', ry);
-      rect.setAttribute('width', rw); rect.setAttribute('height', rh);
-      rect.setAttribute('fill', sh.color); rect.setAttribute('fill-opacity', '0.08');
-      rect.setAttribute('stroke', sh.color); rect.setAttribute('stroke-width', sh.strokeW);
-      svgEl.appendChild(rect);
-      // 4 corner nodes: TL, TR, BR, BL
-      [[sh.x1,sh.y1,0],[sh.x2,sh.y1,1],[sh.x2,sh.y2,2],[sh.x1,sh.y2,3]].forEach(([x,y,ni]) => {
-        svgEl.appendChild(makeNode(x, y, sh.color, id, si, ni));
-      });
+  _loop(){
+    this._raf=requestAnimationFrame(()=>this._loop());
+    if(!this._dirty) return;
+    this._dirty=false;
+    this._render();
+  }
+
+  dirty(){ this._dirty=true; }
+
+  _render(){
+    const ctx=this.ctx,W=this.W,H=this.H;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle=CVS_BG; ctx.fillRect(0,0,this.dW,this.dH);
+    this._grid();
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0,0,this.dW,this.dH); ctx.clip();
+    this.drawings.forEach(d=>{
+      this._draw(d,d.id===this.selId,d.id===this.hoverId&&d.id!==this.selId);
+    });
+    if(this.ds) this._drawLive();
+    ctx.restore();
+    this._axes();
+  }
+
+  _grid(){
+    const ctx=this.ctx;
+    ctx.strokeStyle=GRID_CLR; ctx.lineWidth=0.5;
+    for(let i=1;i<8;i++){const x=i/8*this.dW;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,this.dH);ctx.stroke();}
+    for(let i=1;i<6;i++){const y=i/6*this.dH;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(this.dW,y);ctx.stroke();}
+  }
+
+  _axes(){
+    const ctx=this.ctx,v=this.vp;
+    ctx.fillStyle=AXIS_BG;
+    ctx.fillRect(this.dW,0,PRICE_W,this.H);
+    ctx.fillRect(0,this.dH,this.dW,TIME_H);
+    ctx.strokeStyle=AXIS_CLR; ctx.lineWidth=0.5; ctx.setLineDash([]);
+    ctx.beginPath();ctx.moveTo(this.dW,0);ctx.lineTo(this.dW,this.dH);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,this.dH);ctx.lineTo(this.dW,this.dH);ctx.stroke();
+    ctx.fillStyle=AXIS_CLR; ctx.font='10px monospace';
+    ctx.textAlign='left';
+    for(let i=0;i<=6;i++){
+      const cy=v.pMin+i/6*(v.pMax-v.pMin);
+      const py=this.dH-i/6*this.dH;
+      ctx.fillText(cy.toFixed(1),this.dW+5,py+4);
     }
+    ctx.textAlign='center';
+    for(let i=0;i<=8;i++){
+      const cx=v.tMin+i/8*(v.tMax-v.tMin);
+      ctx.fillText(cx.toFixed(0),i/8*this.dW,this.dH+14);
+    }
+  }
+
+  _setStroke(ctx,color,w,ls,sel){
+    ctx.strokeStyle=sel?SEL_CLR:color;
+    ctx.lineWidth=sel?w+1:w;
+    ctx.lineCap='round'; ctx.lineJoin='round';
+    if(ls==='dashed') ctx.setLineDash([w*4,w*3]);
+    else if(ls==='dotted') ctx.setLineDash([w,w*2]);
+    else ctx.setLineDash([]);
+  }
+
+  _draw(d,sel,hov){
+    const ctx=this.ctx;
+    ctx.globalAlpha=hov?0.65:1;
+    if(d.type==='trendline'){
+      const p1=this.toP(d.x1,d.y1),p2=this.toP(d.x2,d.y2);
+      this._setStroke(ctx,d.color,d.w,d.ls,sel);
+      ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();
+      ctx.setLineDash([]);
+      if(sel||hov){this._handle(p1.x,p1.y,sel);this._handle(p2.x,p2.y,sel);}
+    } else if(d.type==='path'){
+      if(d.pts.length<2){ctx.globalAlpha=1;return;}
+      this._setStroke(ctx,d.color,d.w,d.ls,sel);
+      ctx.beginPath();
+      const p0=this.toP(d.pts[0].x,d.pts[0].y);ctx.moveTo(p0.x,p0.y);
+      d.pts.slice(1).forEach(pt=>{const p=this.toP(pt.x,pt.y);ctx.lineTo(p.x,p.y);});
+      ctx.stroke(); ctx.setLineDash([]);
+      if(sel||hov) d.pts.forEach(pt=>{const p=this.toP(pt.x,pt.y);this._handle(p.x,p.y,sel);});
+    } else if(d.type==='rect'){
+      const p1=this.toP(d.x1,d.y1),p2=this.toP(d.x2,d.y2);
+      const rx=Math.min(p1.x,p2.x),ry=Math.min(p1.y,p2.y);
+      const rw=Math.abs(p2.x-p1.x),rh=Math.abs(p2.y-p1.y);
+      ctx.fillStyle=d.color; ctx.globalAlpha*=0.09;
+      ctx.fillRect(rx,ry,rw,rh);
+      ctx.globalAlpha=hov?0.65:1;
+      this._setStroke(ctx,d.color,d.w,d.ls,sel);
+      ctx.strokeRect(rx,ry,rw,rh); ctx.setLineDash([]);
+      if(sel||hov){
+        const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
+        [[p1.x,p1.y],[p2.x,p1.y],[p2.x,p2.y],[p1.x,p2.y],
+         [mx,p1.y],[p2.x,my],[mx,p2.y],[p1.x,my],[mx,my]]
+        .forEach(([x,y])=>this._handle(x,y,sel));
+      }
+    }
+    ctx.globalAlpha=1;
+  }
+
+  _handle(x,y,sel){
+    const ctx=this.ctx;
+    ctx.beginPath();ctx.arc(x,y,HANDLE_R,0,Math.PI*2);
+    ctx.fillStyle='#fff';ctx.fill();
+    ctx.strokeStyle=sel?SEL_CLR:'#555';
+    ctx.lineWidth=1.5;ctx.setLineDash([]);ctx.stroke();
+  }
+
+  _drawLive(){
+    const ds=this.ds,ctx=this.ctx;
+    if(!ds||!ds.pts.length) return;
+    ctx.globalAlpha=0.7;
+    const fake={id:'__live',type:ds.tool,color:this.color,w:this.sw,ls:this.ls,
+      pts:ds.pts,x1:ds.pts[0].x,y1:ds.pts[0].y,
+      x2:(ds.pts[1]||ds.pts[0]).x,y2:(ds.pts[1]||ds.pts[0]).y};
+    this._draw(fake,false,false);
+    ctx.globalAlpha=1;
+  }
+
+  _bind(){
+    const cv=this.cv;
+    const gp=e=>{const r=cv.getBoundingClientRect();const s=e.touches?e.touches[0]:e;return{x:s.clientX-r.left,y:s.clientY-r.top};};
+    const ge=e=>{const r=cv.getBoundingClientRect();const s=e.changedTouches[0];return{x:s.clientX-r.left,y:s.clientY-r.top};};
+    cv.addEventListener('mousedown', e=>{if(e.button===0)this._down(gp(e));});
+    cv.addEventListener('mousemove', e=>this._move(gp(e)));
+    cv.addEventListener('mouseup',   e=>{if(e.button===0)this._up(gp(e));});
+    cv.addEventListener('dblclick',  e=>this._dbl(gp(e)));
+    cv.addEventListener('touchstart',e=>{e.preventDefault();this._down(gp(e));},{passive:false});
+    cv.addEventListener('touchmove', e=>{e.preventDefault();this._move(gp(e));},{passive:false});
+    cv.addEventListener('touchend',  e=>{e.preventDefault();this._up(ge(e));},{passive:false});
+    const ro=new ResizeObserver(()=>{this._resize();this.dirty();});ro.observe(cv);
+    this._keyFn=e=>{
+      if(!document.getElementById(this.cv.id)) return;
+      if(e.key==='Escape'){this.ds=null;this.selId=null;this.dirty();}
+      if(e.key==='Enter') this._finish();
+      if((e.key==='Delete'||e.key==='Backspace')&&this.selId) this._del();
+      if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();this.undo();}
+      if((e.ctrlKey||e.metaKey)&&e.key==='y'){e.preventDefault();this.redo();}
+    };
+    window.addEventListener('keydown',this._keyFn);
+  }
+
+  _down(p){
+    if(p.x>this.dW||p.y>this.dH) return;
+    // drawing in progress?
+    if(this.ds){ this._click(p); return; }
+    // hit handle on selected?
+    if(this.selId){
+      const hi=this._hitHandle(this.selId,p);
+      if(hi!==-1){
+        this._ph();
+        this.dragCtx={type:'handle',id:this.selId,hi,orig:JSON.parse(JSON.stringify(this.drawings.find(x=>x.id===this.selId))),sp:this.fromP(p.x,p.y)};
+        return;
+      }
+    }
+    // hit body?
+    const hit=this._hitBody(p);
+    if(hit){
+      this.selId=hit.id;this._ph();
+      this.dragCtx={type:'body',id:hit.id,orig:JSON.parse(JSON.stringify(hit)),sp:this.fromP(p.x,p.y)};
+      this.dirty();return;
+    }
+    // start new drawing
+    this.selId=null;
+    const cp=this.fromP(p.x,p.y);
+    if(this.tool==='trendline') this.ds={tool:'trendline',pts:[{...cp},{...cp}]};
+    else if(this.tool==='path') this.ds={tool:'path',pts:[{...cp},{...cp}]};
+    else if(this.tool==='rect') this.ds={tool:'rect',pts:[{...cp},{...cp}]};
+    this.dirty();
+  }
+
+  _move(p){
+    const cp=this.fromP(p.x,p.y);
+    if(this.dragCtx){
+      const d=this.drawings.find(x=>x.id===this.dragCtx.id);
+      if(d){
+        if(this.dragCtx.type==='handle'){
+          this._mh(d,this.dragCtx.hi,cp);
+        } else {
+          const dx=cp.x-this.dragCtx.sp.x,dy=cp.y-this.dragCtx.sp.y;
+          this._tr(d,this.dragCtx.orig,dx,dy);
+        }
+      }
+      this.dirty();return;
+    }
+    if(this.ds){
+      const pts=this.ds.pts;
+      pts[pts.length-1]={...cp};
+      this.dirty();return;
+    }
+    const hit=this._hitBody(p);
+    const nh=hit?hit.id:null;
+    if(nh!==this.hoverId){this.hoverId=nh;this.dirty();}
+    this.cv.style.cursor=hit?'move':'crosshair';
+  }
+
+  _up(p){
+    if(this.dragCtx){this.dragCtx=null;this.fut=[];}
+  }
+
+  _dbl(p){if(this.ds?.tool==='path')this._finish();}
+
+  _click(p){
+    const cp=this.fromP(p.x,p.y),ds=this.ds;
+    if(ds.tool==='trendline'){ds.pts[1]={...cp};this._commit();}
+    else if(ds.tool==='rect'){ds.pts[1]={...cp};this._commit();}
+    else if(ds.tool==='path'){
+      ds.pts[ds.pts.length-1]={...cp};
+      ds.pts.push({...cp});
+    }
+  }
+
+  _finish(){
+    if(!this.ds) return;
+    if(this.ds.tool==='path'&&this.ds.pts.length>2){this.ds.pts.pop();this._commit();}
+    else{this.ds=null;this.dirty();}
+  }
+
+  _commit(){
+    const ds=this.ds;this._ph();
+    const id='d'+Date.now()+Math.random().toString(36).slice(2,5);
+    let d;
+    if(ds.tool==='trendline') d={id,type:'trendline',color:this.color,w:this.sw,ls:this.ls,x1:ds.pts[0].x,y1:ds.pts[0].y,x2:ds.pts[1].x,y2:ds.pts[1].y};
+    else if(ds.tool==='path') d={id,type:'path',color:this.color,w:this.sw,ls:this.ls,pts:[...ds.pts]};
+    else if(ds.tool==='rect') d={id,type:'rect',color:this.color,w:this.sw,ls:this.ls,x1:ds.pts[0].x,y1:ds.pts[0].y,x2:ds.pts[1].x,y2:ds.pts[1].y};
+    this.drawings.push(d);this.selId=id;this.ds=null;this.fut=[];this.dirty();
+  }
+
+  _hitBody(p){
+    for(let i=this.drawings.length-1;i>=0;i--){
+      const d=this.drawings[i];
+      if(d.type==='trendline'){
+        const p1=this.toP(d.x1,d.y1),p2=this.toP(d.x2,d.y2);
+        if(this._dSeg(p,p1,p2)<HIT_R) return d;
+      } else if(d.type==='path'){
+        for(let j=0;j<d.pts.length-1;j++){
+          const a=this.toP(d.pts[j].x,d.pts[j].y),b=this.toP(d.pts[j+1].x,d.pts[j+1].y);
+          if(this._dSeg(p,a,b)<HIT_R) return d;
+        }
+      } else if(d.type==='rect'){
+        const p1=this.toP(d.x1,d.y1),p2=this.toP(d.x2,d.y2);
+        const rx=Math.min(p1.x,p2.x)-HIT_R,ry=Math.min(p1.y,p2.y)-HIT_R;
+        const rw=Math.abs(p2.x-p1.x)+HIT_R*2,rh=Math.abs(p2.y-p1.y)+HIT_R*2;
+        if(p.x>=rx&&p.x<=rx+rw&&p.y>=ry&&p.y<=ry+rh) return d;
+      }
+    }
+    return null;
+  }
+
+  _dSeg(p,a,b){
+    const dx=b.x-a.x,dy=b.y-a.y;
+    if(!dx&&!dy) return Math.hypot(p.x-a.x,p.y-a.y);
+    const t=Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/(dx*dx+dy*dy)));
+    return Math.hypot(p.x-(a.x+t*dx),p.y-(a.y+t*dy));
+  }
+
+  _hitHandle(id,p){
+    const d=this.drawings.find(x=>x.id===id);if(!d) return -1;
+    const hs=d.type==='trendline'?[{x:d.x1,y:d.y1},{x:d.x2,y:d.y2}]
+      :d.type==='path'?d.pts
+      :d.type==='rect'?[{x:d.x1,y:d.y1},{x:d.x2,y:d.y1},{x:d.x2,y:d.y2},{x:d.x1,y:d.y2},
+          {x:(d.x1+d.x2)/2,y:d.y1},{x:d.x2,y:(d.y1+d.y2)/2},{x:(d.x1+d.x2)/2,y:d.y2},
+          {x:d.x1,y:(d.y1+d.y2)/2},{x:(d.x1+d.x2)/2,y:(d.y1+d.y2)/2}]:[];
+    for(let i=0;i<hs.length;i++){
+      const hp=this.toP(hs[i].x,hs[i].y);
+      if(Math.hypot(p.x-hp.x,p.y-hp.y)<HANDLE_HIT) return i;
+    }
+    return -1;
+  }
+
+  _mh(d,hi,cp){
+    if(d.type==='trendline'){hi===0?(d.x1=cp.x,d.y1=cp.y):(d.x2=cp.x,d.y2=cp.y);}
+    else if(d.type==='path'){d.pts[hi]={...cp};}
+    else if(d.type==='rect'){
+      if(hi===0){d.x1=cp.x;d.y1=cp.y;} else if(hi===1){d.x2=cp.x;d.y1=cp.y;}
+      else if(hi===2){d.x2=cp.x;d.y2=cp.y;} else if(hi===3){d.x1=cp.x;d.y2=cp.y;}
+      else if(hi===4){d.y1=cp.y;} else if(hi===5){d.x2=cp.x;}
+      else if(hi===6){d.y2=cp.y;} else if(hi===7){d.x1=cp.x;}
+      else{const dx=cp.x-(d.x1+d.x2)/2,dy=cp.y-(d.y1+d.y2)/2;d.x1+=dx;d.x2+=dx;d.y1+=dy;d.y2+=dy;}
+    }
+  }
+
+  _tr(d,orig,dx,dy){
+    if(d.type==='trendline'){d.x1=orig.x1+dx;d.y1=orig.y1+dy;d.x2=orig.x2+dx;d.y2=orig.y2+dy;}
+    else if(d.type==='path'){d.pts=orig.pts.map(p=>({x:p.x+dx,y:p.y+dy}));}
+    else if(d.type==='rect'){d.x1=orig.x1+dx;d.y1=orig.y1+dy;d.x2=orig.x2+dx;d.y2=orig.y2+dy;}
+  }
+
+  _del(){if(!this.selId)return;this._ph();this.drawings=this.drawings.filter(x=>x.id!==this.selId);this.selId=null;this.fut=[];this.dirty();}
+  _ph(){this.hist.push(JSON.stringify(this.drawings));if(this.hist.length>60)this.hist.shift();}
+  undo(){if(!this.hist.length)return;this.fut.push(JSON.stringify(this.drawings));this.drawings=JSON.parse(this.hist.pop());this.selId=null;this.ds=null;this.dirty();}
+  redo(){if(!this.fut.length)return;this.hist.push(JSON.stringify(this.drawings));this.drawings=JSON.parse(this.fut.pop());this.selId=null;this.dirty();}
+  setTool(t){this.tool=t;this.ds=null;this.selId=null;this.dirty();}
+  setColor(c){this.color=c;if(this.selId){const d=this.drawings.find(x=>x.id===this.selId);if(d)d.color=c;}this.dirty();}
+  serialise(){return JSON.stringify(this.drawings);}
+  destroy(){cancelAnimationFrame(this._raf);window.removeEventListener('keydown',this._keyFn);}
+}
+
+// ── Chart registry ─────────────────────────────────────────────
+const DC={};
+function getChart(id){return DC[id]||null;}
+function makeChart(id,data){
+  if(DC[id]){DC[id].dirty();return DC[id];}
+  const cv=document.getElementById(id);if(!cv)return null;
+  const ch=new DrawingChart(cv,data);DC[id]=ch;return ch;
+}
+function killChart(id){if(DC[id]){DC[id].destroy();delete DC[id];}}
+
+// ── Toolbar ────────────────────────────────────────────────────
+const TICONS={
+  trendline:`<svg viewBox="0 0 22 22"><circle cx="3" cy="19" r="2.5" fill="currentColor" stroke="none"/><circle cx="19" cy="3" r="2.5" fill="currentColor" stroke="none"/><line x1="3" y1="19" x2="19" y2="3" stroke-width="1.6"/></svg>`,
+  path:`<svg viewBox="0 0 22 22"><circle cx="3" cy="19" r="2.5" fill="currentColor" stroke="none"/><circle cx="11" cy="7" r="2.5" fill="currentColor" stroke="none"/><circle cx="19" cy="14" r="2.5" fill="currentColor" stroke="none"/><polyline points="3,19 11,7 19,14" fill="none" stroke-width="1.6"/></svg>`,
+  rect:`<svg viewBox="0 0 22 22"><rect x="3" y="6" width="16" height="10" rx="1" fill="none" stroke-width="1.6"/><circle cx="3" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="19" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="19" cy="16" r="2" fill="currentColor" stroke="none"/><circle cx="3" cy="16" r="2" fill="currentColor" stroke="none"/></svg>`
+};
+const THINTS={
+  trendline:'Trendline — tap start point, then end point. Drag line or endpoints to adjust.',
+  path:'Path — tap to add points. Double-tap or press Enter to finish.',
+  rect:'Rectangle — tap first corner, tap opposite corner. Drag corners/edges/center.'
+};
+function tbHTML(cid,compact){
+  const s=compact?'style="width:30px;height:30px"':'';
+  const tb=(t,ic)=>`<button class="stb" ${s} id="ctb-${cid}-${t}" onclick="cTool('${cid}','${t}')" title="${t}">${ic}</button>`;
+  return `${tb('trendline',TICONS.trendline)}${tb('path',TICONS.path)}${tb('rect',TICONS.rect)}
+  <div class="stb-sep"></div>
+  <input type="color" class="s-cpick" value="#ef5350" oninput="cColor('${cid}',this.value)" title="Color">
+  <select class="s-wsel" onchange="cW('${cid}',+this.value)"><option value="1">1px</option><option value="2" selected>2px</option><option value="3">3px</option></select>
+  <select class="s-wsel" onchange="cLS('${cid}',this.value)"><option value="solid">——</option><option value="dashed">- -</option><option value="dotted">···</option></select>
+  <div class="stb-sep"></div>
+  <button class="stb" ${s} onclick="cUndo('${cid}')" title="Undo Ctrl+Z"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 8h10a6 6 0 0 1 0 12H5"/><polyline points="3,4 3,8 7,8"/></svg></button>
+  <button class="stb" ${s} onclick="cRedo('${cid}')" title="Redo Ctrl+Y"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M19 8H9a6 6 0 0 0 0 12h6"/><polyline points="19,4 19,8 15,8"/></svg></button>
+  <button class="stb" ${s} onclick="cDel('${cid}')" title="Delete selected"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="3,6 19,6"/><path d="M7 6V4h8v2M17 6l-1 13H6L5 6"/></svg></button>`;
+}
+function cTool(id,t){const ch=DC[id];if(!ch)return;ch.setTool(t);document.querySelectorAll(`[id^="ctb-${id}-"]`).forEach(b=>b.classList.remove('on'));document.getElementById(`ctb-${id}-${t}`)?.classList.add('on');const s=document.getElementById('cst-'+id);if(s)s.textContent=THINTS[t]||'';}
+function cColor(id,c){DC[id]?.setColor(c);}
+function cW(id,w){if(DC[id])DC[id].sw=w;}
+function cLS(id,s){if(DC[id])DC[id].ls=s;}
+function cUndo(id){DC[id]?.undo();}
+function cRedo(id){DC[id]?.redo();}
+function cDel(id){DC[id]?._del();}
+
+// ─── MAIN SKETCH TAB ─────────────────────────────────────────────
+function renderSketch(container, mode){
+  const cid='cm'+(sel?sel.id:0);
+  const data=sel?(sec==='concepts'?sel.concept_sketch:sel.sketch):null;
+  killChart(cid);
+  container.innerHTML=`<div class="sketch-wrap">
+    <div class="sketch-tb">${tbHTML(cid,false)}</div>
+    <canvas class="chart-canvas" id="${cid}"></canvas>
+    <div class="sketch-status" id="cst-${cid}">${THINTS.trendline}</div>
+  </div>`;
+  requestAnimationFrame(()=>{
+    const ch=makeChart(cid,data);
+    if(ch){ch.setTool('trendline');document.getElementById(`ctb-${cid}-trendline`)?.classList.add('on');}
   });
 }
 
-function makeNode(x, y, color, canvasId, shapeIdx, nodeIdx) {
-  const c = mkEl('circle');
-  c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', NODE_VISUAL_R);
-  c.setAttribute('fill', '#fff'); c.setAttribute('stroke', color); c.setAttribute('stroke-width', 2);
-  c.setAttribute('data-canvas', canvasId);
-  c.setAttribute('data-si', shapeIdx); c.setAttribute('data-ni', nodeIdx);
-  c.style.cursor = 'move';
-  return c;
-}
-
-// ── Drag state ────────────────────────────────────────────────────
-let drag = null; // { canvasId, si, ni, offX, offY }
-let drawState = null; // active drawing in progress
-
-// ── Get pointer position relative to SVG ─────────────────────────
-function getPt(svgEl, e) {
-  const r = svgEl.getBoundingClientRect();
-  const src = e.touches ? e.touches[0] : e;
-  return { x: (src.clientX - r.left), y: (src.clientY - r.top) };
-}
-
-// ── Hit-test: is tap on a node handle? ───────────────────────────
-function hitNode(svgEl, p) {
-  const nodes = svgEl.querySelectorAll('circle[data-si]');
-  for (const n of nodes) {
-    const cx = parseFloat(n.getAttribute('cx'));
-    const cy = parseFloat(n.getAttribute('cy'));
-    const dist = Math.hypot(p.x - cx, p.y - cy);
-    if (dist <= NODE_R + 4) return n;
-  }
-  return null;
-}
-
-// ── Attach events to a canvas SVG ────────────────────────────────
-function attachCanvas(svgEl, csId) {
-  // Touch
-  svgEl.addEventListener('touchstart', e => { e.preventDefault(); canvasPointerDown(svgEl, csId, e); }, { passive: false });
-  svgEl.addEventListener('touchmove', e => { e.preventDefault(); canvasPointerMove(svgEl, csId, e); }, { passive: false });
-  svgEl.addEventListener('touchend', e => { e.preventDefault(); canvasPointerUp(svgEl, csId, e); }, { passive: false });
-  // Mouse
-  svgEl.addEventListener('mousedown', e => canvasPointerDown(svgEl, csId, e));
-  svgEl.addEventListener('mousemove', e => canvasPointerMove(svgEl, csId, e));
-  svgEl.addEventListener('mouseup', e => canvasPointerUp(svgEl, csId, e));
-}
-
-function canvasPointerDown(svgEl, csId, e) {
-  if (e.button !== undefined && e.button !== 0) return;
-  const p = getPt(svgEl, e);
-  const cs = getCS(csId);
-
-  // Check if tapping an existing node handle
-  const node = hitNode(svgEl, p);
-  if (node) {
-    drag = {
-      canvasId: csId,
-      si: parseInt(node.getAttribute('data-si')),
-      ni: parseInt(node.getAttribute('data-ni'))
-    };
-    return;
-  }
-
-  // Start a new shape
-  const { tool, color, strokeW } = cs;
-
-  if (tool === 'path') {
-    if (drawState && drawState.tool === 'path' && drawState.csId === csId) {
-      // continuing existing path — add another node
-      drawState.sh.pts.push({ x: p.x, y: p.y });
-      renderCanvas(csId);
-    } else {
-      // start a brand new path
-      const sh = { type: 'path', color, strokeW, pts: [{ x: p.x, y: p.y }, { x: p.x, y: p.y }] };
-      cs.shapes.push(sh);
-      drawState = { tool: 'path', csId, sh, live: true };
-      renderCanvas(csId);
-    }
-  } else if (tool === 'trendline') {
-    if (drawState && drawState.tool === 'trendline' && drawState.csId === csId && drawState.phase === 1) {
-      // second tap — finalise
-      drawState.sh.x2 = p.x; drawState.sh.y2 = p.y;
-      drawState = null;
-      renderCanvas(csId);
-    } else {
-      // first tap — place start node
-      const sh = { type: 'trendline', color, strokeW, x1: p.x, y1: p.y, x2: p.x, y2: p.y };
-      cs.shapes.push(sh);
-      drawState = { tool: 'trendline', csId, sh, phase: 1 };
-      renderCanvas(csId);
-    }
-  } else if (tool === 'rect') {
-    if (drawState && drawState.tool === 'rect' && drawState.csId === csId && drawState.phase === 1) {
-      // second tap — finalise
-      drawState.sh.x2 = p.x; drawState.sh.y2 = p.y;
-      drawState = null;
-      renderCanvas(csId);
-    } else {
-      const sh = { type: 'rect', color, strokeW, x1: p.x, y1: p.y, x2: p.x, y2: p.y };
-      cs.shapes.push(sh);
-      drawState = { tool: 'rect', csId, sh, phase: 1 };
-      renderCanvas(csId);
-    }
-  }
-}
-
-function canvasPointerMove(svgEl, csId, e) {
-  const p = getPt(svgEl, e);
-
-  // Dragging a node handle
-  if (drag && drag.canvasId === csId) {
-    const cs = getCS(csId);
-    const sh = cs.shapes[drag.si];
-    if (!sh) return;
-    if (sh.type === 'path') {
-      sh.pts[drag.ni] = { x: p.x, y: p.y };
-    } else if (sh.type === 'trendline') {
-      if (drag.ni === 0) { sh.x1 = p.x; sh.y1 = p.y; }
-      else { sh.x2 = p.x; sh.y2 = p.y; }
-    } else if (sh.type === 'rect') {
-      // corners: 0=TL 1=TR 2=BR 3=BL
-      if (drag.ni === 0) { sh.x1 = p.x; sh.y1 = p.y; }
-      else if (drag.ni === 1) { sh.x2 = p.x; sh.y1 = p.y; }
-      else if (drag.ni === 2) { sh.x2 = p.x; sh.y2 = p.y; }
-      else if (drag.ni === 3) { sh.x1 = p.x; sh.y2 = p.y; }
-    }
-    renderCanvas(csId);
-    return;
-  }
-
-  // Live preview while placing second point
-  if (drawState && drawState.csId === csId) {
-    const sh = drawState.sh;
-    if (drawState.tool === 'path' && drawState.live) {
-      sh.pts[sh.pts.length - 1] = { x: p.x, y: p.y };
-      renderCanvas(csId);
-    } else if (drawState.tool === 'trendline' && drawState.phase === 1) {
-      sh.x2 = p.x; sh.y2 = p.y;
-      renderCanvas(csId);
-    } else if (drawState.tool === 'rect' && drawState.phase === 1) {
-      sh.x2 = p.x; sh.y2 = p.y;
-      renderCanvas(csId);
-    }
-  }
-}
-
-function canvasPointerUp(svgEl, csId, e) {
-  if (drag) {
-    drag = null;
-    return;
-  }
-  // For path tool — on finger lift, the last preview node becomes a fixed node.
-  // The user can tap again to add the next node, or switch tools to stop.
-  if (drawState && drawState.csId === csId && drawState.tool === 'path' && drawState.live) {
-    // freeze the live node — next tap will add another
-    drawState.live = false;
-    renderCanvas(csId);
-  }
-}
-
-// ── Undo last shape ───────────────────────────────────────────────
-function undoShape(csId) {
-  const cs = getCS(csId);
-  if (drawState && drawState.csId === csId) drawState = null;
-  cs.shapes.pop();
-  renderCanvas(csId);
-}
-
-// ── Clear canvas ──────────────────────────────────────────────────
-function clearCanvas(csId) {
-  if (!confirm('Clear this sketch?')) return;
-  drawState = null;
-  getCS(csId).shapes = [];
-  renderCanvas(csId);
-}
-
-// ── Finish path (stop adding nodes) ──────────────────────────────
-function finishPath(csId) {
-  if (drawState && drawState.csId === csId && drawState.tool === 'path') {
-    // Remove the trailing preview point if no second actual tap happened
-    const sh = drawState.sh;
-    if (sh.pts.length > 1) sh.pts.pop();
-    drawState = null;
-    renderCanvas(csId);
-  }
-}
-
-// ── Grid ─────────────────────────────────────────────────────────
-function drawGrid(svgEl, clsName, step) {
-  if (svgEl.querySelector('.' + clsName)) return;
-  const g = mkEl('g'); g.setAttribute('class', clsName);
-  const W = svgEl.clientWidth || 800, H = svgEl.clientHeight || 400;
-  for (let x = 0; x <= W; x += step) g.appendChild(gridLine(x, 0, x, H));
-  for (let y = 0; y <= H; y += step) g.appendChild(gridLine(0, y, W, y));
-  svgEl.prepend(g);
-}
-function gridLine(x1, y1, x2, y2) {
-  const l = mkEl('line');
-  l.setAttribute('x1', x1); l.setAttribute('y1', y1);
-  l.setAttribute('x2', x2); l.setAttribute('y2', y2);
-  l.setAttribute('stroke', 'rgba(10,20,40,.045)'); l.setAttribute('stroke-width', '0.5');
-  return l;
-}
-function mkEl(tag) { return document.createElementNS('http://www.w3.org/2000/svg', tag); }
-function setAtt(el, attrs) { for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v); }
-
-// ── Toolbar HTML helpers ──────────────────────────────────────────
-const TOOL_ICONS = {
-  path: `<svg viewBox="0 0 22 22"><circle cx="4" cy="18" r="2" fill="currentColor" stroke="none"/><circle cx="11" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="18" cy="14" r="2" fill="currentColor" stroke="none"/><polyline points="4,18 11,6 18,14" stroke-width="1.6" fill="none"/></svg>`,
-  trendline: `<svg viewBox="0 0 22 22"><circle cx="3" cy="18" r="2.2" fill="currentColor" stroke="none"/><circle cx="19" cy="4" r="2.2" fill="currentColor" stroke="none"/><line x1="3" y1="18" x2="19" y2="4" stroke-width="1.6"/></svg>`,
-  rect: `<svg viewBox="0 0 22 22"><rect x="3" y="6" width="16" height="10" rx="1" stroke-width="1.6" fill="none"/><circle cx="3" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="19" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="19" cy="16" r="2" fill="currentColor" stroke="none"/><circle cx="3" cy="16" r="2" fill="currentColor" stroke="none"/></svg>`
-};
-const TOOL_HINTS = {
-  path: 'Path — tap to place nodes. Lift finger, tap again to continue. Switch tools to stop.',
-  trendline: 'Trendline — tap to place start, tap again for end. Drag either endpoint to adjust.',
-  rect: 'Rectangle — tap to place first corner, tap again for opposite corner. Drag corners to resize.'
-};
-
-function toolbarHTML(csId, activeTool, color, strokeW) {
-  const btns = ['path','trendline','rect'].map(t =>
-    `<button class="stb ${t===activeTool?'on':''}" onclick="setCanvasTool('${csId}','${t}')" title="${t}">${TOOL_ICONS[t]}</button>`
-  ).join('');
-  return `${btns}
-    <div class="stb-sep"></div>
-    <input type="color" class="s-cpick" value="${color}" oninput="getCS('${csId}').color=this.value" title="Color">
-    <select class="s-wsel" onchange="getCS('${csId}').strokeW=parseInt(this.value)">
-      <option value="1" ${strokeW===1?'selected':''}>1px</option>
-      <option value="2" ${strokeW===2?'selected':''}>2px</option>
-      <option value="3" ${strokeW===3?'selected':''}>3px</option>
-    </select>
-    <div class="stb-sep"></div>
-    <button class="stb" onclick="undoShape('${csId}')" title="Undo last shape"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 8h10a6 6 0 0 1 0 12H5"/><polyline points="3,4 3,8 7,8"/></svg></button>
-    <button class="stb" onclick="clearCanvas('${csId}')" title="Clear all"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="3,6 19,6"/><path d="M7 6V4h8v2M17 6l-1 13H6L5 6"/></svg></button>`;
-}
-
-function setCanvasTool(csId, t) {
-  // if switching away from path mid-draw, finish it
-  if (drawState && drawState.csId === csId && drawState.tool === 'path') finishPath(csId);
-  if (drawState && drawState.csId === csId) drawState = null;
-  getCS(csId).tool = t;
-  // re-render toolbar hint and button states
-  const tb = document.getElementById('tb-'+csId);
-  if (tb) {
-    const cs = getCS(csId);
-    tb.innerHTML = toolbarHTML(csId, t, cs.color, cs.strokeW);
-  }
-  const hint = document.getElementById('hint-'+csId);
-  if (hint) hint.textContent = TOOL_HINTS[t] || '';
-}
-
-// ─── MAIN SKETCH TAB ─────────────────────────────────────────────
-function renderSketch(container, mode) {
-  const csId = 'mainSketch-' + (sel ? sel.id : 0);
-  const sketchData = mode === 'main' ? (sec === 'concepts' ? sel.concept_sketch : sel.sketch) : null;
-  deserialiseCanvas(csId, sketchData);
-  const cs = getCS(csId);
-  container.innerHTML = `<div class="sketch-wrap">
-    <div class="sketch-tb" id="tb-${csId}">${toolbarHTML(csId, cs.tool, cs.color, cs.strokeW)}</div>
-    <svg class="draw-svg" id="${csId}" xmlns="http://www.w3.org/2000/svg"></svg>
-    <div class="sketch-hint" id="hint-${csId}">${TOOL_HINTS[cs.tool]}</div>
-  </div>`;
-  const svgEl = document.getElementById(csId);
-  drawGrid(svgEl, 'sk-grid', 40);
-  renderCanvas(csId);
-  attachCanvas(svgEl, csId);
-}
 
 // ─── RULES ───────────────────────────────────────────────────────
 function renderRules(el){
@@ -904,7 +982,7 @@ function renderRules(el){
   el.innerHTML=`<div class="rules-panel">
     <div class="concept-card" style="background:var(--card)">
       <div class="field-label" style="margin-bottom:8px">About this rule set</div>
-      <textarea class="rules-intro" style="width:100%;background:transparent;border:none;outline:none;color:var(--text2);font-size:13px;line-height:1.75;font-family:var(--sans);resize:none;min-height:40px" placeholder="What is the purpose of these rules? What behaviour are they enforcing?" oninput="sel.rules_intro=this.value">${esc(sel.rules_intro||'')}</textarea>
+      <textarea class="rules-intro" style="width:100%;background:transparent;border:none;outline:none;color:var(--text2);font-size:13px;line-height:1.75;font-family:var(--sans);resize:none;min-height:40px" placeholder="What is the purpose of these rules? What behaviour are they enforcing?" oninput="sel.rules_intro=this.value">${esc(sel.rules_intro||'')}` + `</textarea>
     </div>
     <div id="rulesList"></div>
     <button class="add-rule-btn" onclick="addRule()">
@@ -919,12 +997,12 @@ function renderRuleRows(){
   el.innerHTML=sel.rules.map((r,i)=>`
     <div class="rule-item">
       <div class="rule-num">${i+1}</div>
-      <textarea class="rule-inp" rows="1" placeholder="Write rule ${i+1}…" oninput="sel.rules[${i}].t=this.value;autoResizeTA(this)" onfocus="autoResizeTA(this)">${esc(r.t||'')}</textarea>
+      <textarea class="rule-inp" rows="1" placeholder="Write rule ${i+1}\u2026" oninput="sel.rules[${i}].t=this.value;autoResizeTA(this)" onfocus="autoResizeTA(this)">${esc(r.t||'')}` + `</textarea>
       <button class="rule-rm" onclick="removeRule(${i})"><svg viewBox="0 0 14 14"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg></button>
     </div>`).join('');
   setTimeout(()=>document.querySelectorAll('.rule-inp').forEach(t=>autoResizeTA(t)),0);
 }
-function autoResizeTA(el){el.style.height='auto';el.style.height=el.scrollHeight+'px'}
+function autoResizeTA(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
 function addRule(){sel.rules.push({t:''});renderRuleRows();}
 function removeRule(i){sel.rules.splice(i,1);renderRuleRows();}
 
@@ -932,39 +1010,40 @@ function removeRule(i){sel.rules.splice(i,1);renderRuleRows();}
 function renderExamples(el){
   if(!sel.examples)sel.examples=[];
   el.innerHTML=`<div class="examples-panel">
-    ${sel.examples.map((ex,i)=>renderExCard(ex,i)).join('')}
+    ${sel.examples.map((ex,i)=>exCard(ex,i)).join('')}
     <button class="add-ex-btn" onclick="addExample()">
       <svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
       Add example
     </button>
   </div>`;
-  sel.examples.forEach((ex,i)=>initExCanvas(ex,i));
+  sel.examples.forEach((_,i)=>initExCanvas(i));
 }
 
-function renderExCard(ex,i){
-  const csId='exSketch-'+(sel?sel.id:0)+'-'+i;
+function exCard(ex,i){
+  const cid='ce'+(sel?sel.id:0)+'x'+i;
   return`<div class="ex-card" id="excard-${i}">
     <div class="ex-card-head">
       <span class="ex-card-num">Example ${i+1}</span>
       <button class="ex-del" onclick="removeExample(${i})"><svg viewBox="0 0 14 14"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg></button>
     </div>
     <div class="ex-body">
-      <textarea class="ex-desc" rows="3" placeholder="Describe what happened — what you saw, why it qualified, how it played out…" oninput="sel.examples[${i}].desc=this.value">${esc(ex.desc||'')}</textarea>
+      <textarea class="ex-desc" rows="3" placeholder="Describe what happened\u2014 what you saw, why it qualified, how it played out\u2026" oninput="sel.examples[${i}].desc=this.value">${esc(ex.desc||'')}` + `</textarea>
       <div class="ex-sketch-area">
-        <div class="ex-sketch-tb" id="tb-${csId}">${toolbarHTML(csId,'path','#3b6ef0',2)}</div>
-        <svg class="ex-draw-svg" id="${csId}" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="ex-sketch-tb">${tbHTML(cid,true)}</div>
+        <canvas class="ex-chart-canvas" id="${cid}"></canvas>
       </div>
     </div>
   </div>`;
 }
 
-function initExCanvas(ex,i){
-  const csId='exSketch-'+(sel?sel.id:0)+'-'+i;
-  const svgEl=document.getElementById(csId);if(!svgEl)return;
-  deserialiseCanvas(csId, ex.sketch||null);
-  drawGrid(svgEl,'ex-grid',32);
-  renderCanvas(csId);
-  attachCanvas(svgEl,csId);
+function initExCanvas(i){
+  const cid='ce'+(sel?sel.id:0)+'x'+i;
+  killChart(cid);
+  const data=sel.examples[i]?.sketch||null;
+  requestAnimationFrame(()=>{
+    const ch=makeChart(cid,data);
+    if(ch){ch.setTool('trendline');document.getElementById(`ctb-${cid}-trendline`)?.classList.add('on');}
+  });
 }
 
 function addExample(){
@@ -974,6 +1053,8 @@ function addExample(){
 }
 function removeExample(i){
   if(!confirm('Remove this example?'))return;
+  const cid='ce'+(sel?sel.id:0)+'x'+i;
+  killChart(cid);
   sel.examples.splice(i,1);
   renderExamples(document.getElementById('docBody'));
 }
@@ -984,15 +1065,19 @@ async function saveEntry(){
   const ct=activeDocTab[sec];
   // capture main sketch
   if(ct==='sketch'){
-    const csId='mainSketch-'+sel.id;
-    if(sec==='concepts')sel.concept_sketch=serialiseCanvas(csId);
-    else sel.sketch=serialiseCanvas(csId);
+    const cid='cm'+sel.id;
+    const ch=DC[cid];
+    if(ch){
+      if(sec==='concepts')sel.concept_sketch=ch.serialise();
+      else sel.sketch=ch.serialise();
+    }
   }
-  // capture all example sketches regardless of active tab
+  // always capture example sketches
   if(sel.examples){
     sel.examples.forEach((ex,i)=>{
-      const csId='exSketch-'+sel.id+'-'+i;
-      if(canvasState[csId])ex.sketch=serialiseCanvas(csId);
+      const cid='ce'+sel.id+'x'+i;
+      const ch=DC[cid];
+      if(ch)ex.sketch=ch.serialise();
     });
   }
   const idx=store[sec].findIndex(x=>x.id===sel.id);
@@ -1001,6 +1086,7 @@ async function saveEntry(){
   renderList();
   toast('Saved');
 }
+
 
 // Service worker for offline
 if('serviceWorker' in navigator){
