@@ -2,257 +2,274 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="theme-color" content="#f6f7f9">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#3b6ef0">
+<meta name="description" content="Document and refine your personal trading models, concepts and rules">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Trading Knowledge Base</title>
+<meta name="apple-mobile-web-app-title" content="Trading KB">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<title>Trading KB</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f6f7f9;
+  --bg:#f5f6f8;
   --card:#ffffff;
-  --card2:#f0f2f5;
-  --border:rgba(10,20,40,.08);
-  --border-md:rgba(10,20,40,.13);
-  --border-hi:rgba(10,20,40,.22);
-  --text:#0f1623;
-  --text2:#5a6478;
-  --text3:#9aa3b2;
+  --card2:#f0f2f6;
+  --border:rgba(15,23,42,.08);
+  --border-md:rgba(15,23,42,.14);
+  --text:#0f1729;
+  --text2:#4b5675;
+  --text3:#9aa3b8;
   --blue:#3b6ef0;
   --blue-lt:rgba(59,110,240,.09);
-  --blue-bd:rgba(59,110,240,.28);
-  --green:#18a06a;
-  --green-lt:rgba(24,160,106,.09);
-  --amber:#c97d1a;
-  --amber-lt:rgba(201,125,26,.1);
-  --red:#d94040;
-  --red-lt:rgba(217,64,64,.09);
-  --purple:#7253e0;
-  --purple-lt:rgba(114,83,224,.09);
-  --sans:'Inter',system-ui,sans-serif;
-  --mono:'JetBrains Mono',ui-monospace,monospace;
-  --sh0:0 1px 2px rgba(10,20,40,.05);
-  --sh1:0 2px 8px rgba(10,20,40,.07),0 1px 2px rgba(10,20,40,.04);
-  --sh2:0 6px 20px rgba(10,20,40,.09),0 2px 6px rgba(10,20,40,.05);
-  --sh3:0 16px 40px rgba(10,20,40,.12),0 4px 12px rgba(10,20,40,.06);
-  --r:8px;
-  --r2:12px;
-  --r3:16px;
+  --blue-bd:rgba(59,110,240,.3);
+  --green:#16a06a;
+  --green-lt:rgba(22,160,106,.09);
+  --red:#dc3f3f;
+  --red-lt:rgba(220,63,63,.09);
+  --sans:'Inter',-apple-system,sans-serif;
+  --sh0:0 1px 3px rgba(15,23,42,.06);
+  --sh1:0 4px 12px rgba(15,23,42,.08),0 1px 3px rgba(15,23,42,.05);
+  --sh2:0 8px 24px rgba(15,23,42,.1),0 2px 6px rgba(15,23,42,.06);
+  --sh3:0 20px 48px rgba(15,23,42,.14),0 4px 12px rgba(15,23,42,.07);
+  --r:8px;--r2:12px;--r3:16px;
 }
 html,body{height:100%;overflow:hidden;font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14px;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 
 /* ── LAYOUT ── */
 .app{display:flex;height:100vh;overflow:hidden}
 
-/* ── NAV RAIL ── */
-.rail{width:64px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:16px 0 12px;gap:4px;z-index:20;box-shadow:var(--sh0)}
-.rail-logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(145deg,#3b6ef0,#2249c8);display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 4px 14px rgba(59,110,240,.35)}
-.rail-logo svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.rail-btn{width:42px;height:42px;border-radius:11px;border:none;background:transparent;color:var(--text3);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:all .16s;position:relative}
-.rail-btn svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-.rail-btn span{font-size:8.5px;font-weight:600;font-family:var(--mono);text-transform:uppercase;letter-spacing:.04em;line-height:1}
+/* ── RAIL ── */
+.rail{width:62px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:14px 0 12px;gap:2px;z-index:20;box-shadow:var(--sh0)}
+.rail-logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(145deg,#3b6ef0,#2146c2);display:flex;align-items:center;justify-content:center;margin-bottom:18px;box-shadow:0 4px 14px rgba(59,110,240,.38)}
+.rail-logo svg{width:17px;height:17px;stroke:#fff;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.rail-btn{width:42px;height:42px;border-radius:11px;border:none;background:transparent;color:var(--text3);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:all .15s;position:relative}
+.rail-btn svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.rail-btn span{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;line-height:1}
 .rail-btn:hover{background:var(--bg);color:var(--text2)}
 .rail-btn.on{background:var(--blue-lt);color:var(--blue)}
-.rail-btn.on::before{content:'';position:absolute;left:-16px;top:50%;transform:translateY(-50%);width:3px;height:22px;border-radius:0 4px 4px 0;background:var(--blue)}
-.rail-sep{width:28px;height:1px;background:var(--border);margin:8px 0}
-.rail-tip{display:none}
+.rail-btn.on::before{content:'';position:absolute;left:-15px;top:50%;transform:translateY(-50%);width:3px;height:20px;border-radius:0 3px 3px 0;background:var(--blue)}
+.rail-sep{width:26px;height:1px;background:var(--border);margin:6px 0}
 
 /* ── SIDEBAR ── */
-.sidebar{width:256px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;transition:transform .26s cubic-bezier(.22,.8,.2,1);z-index:30}
-.sb-top{padding:18px 14px 12px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
+.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;transition:transform .26s cubic-bezier(.22,.8,.2,1);z-index:30}
+.sb-top{padding:16px 13px 12px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:9px}
 .sb-toprow{display:flex;align-items:center;justify-content:space-between}
-.sb-section{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;font-family:var(--mono)}
+.sb-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em}
 .sb-actions{display:flex;gap:6px;align-items:center}
-.sb-close-btn{display:none;width:26px;height:26px;border-radius:7px;border:none;background:var(--bg);color:var(--text2);cursor:pointer;align-items:center;justify-content:center}
-.sb-close-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2}
-.new-btn{height:30px;padding:0 12px;border-radius:8px;border:1px solid var(--blue-bd);background:var(--blue-lt);color:var(--blue);font-size:11.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .14s;white-space:nowrap}
+.sb-close{display:none;width:26px;height:26px;border-radius:7px;border:none;background:var(--bg);color:var(--text2);cursor:pointer;align-items:center;justify-content:center}
+.sb-close svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.2}
+.new-btn{height:32px;padding:0 13px;border-radius:9px;border:1px solid var(--blue-bd);background:var(--blue-lt);color:var(--blue);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .13s}
+.new-btn:hover{background:rgba(59,110,240,.16)}
 .new-btn svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5}
-.new-btn:hover{background:rgba(59,110,240,.15);box-shadow:var(--sh1)}
-.sb-search{width:100%;padding:8px 11px;border-radius:9px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12.5px;outline:none;font-family:var(--sans);transition:all .14s}
+.sb-search{width:100%;padding:8px 11px;border-radius:9px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12.5px;outline:none;font-family:var(--sans);transition:all .13s}
 .sb-search::placeholder{color:var(--text3)}
-.sb-search:focus{border-color:var(--blue-bd);background:var(--card);box-shadow:var(--sh0)}
-/* Mobile section pills */
-.mob-pills{display:none;gap:5px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid var(--border)}
-.mob-pill{padding:6px 11px;border-radius:8px;border:1px solid var(--border-md);background:var(--bg);color:var(--text2);font-size:11px;font-weight:700;font-family:var(--mono);cursor:pointer;transition:all .14s}
-.mob-pill.on{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 2px 8px rgba(59,110,240,.3)}
+.sb-search:focus{border-color:var(--blue-bd);background:var(--card);box-shadow:0 0 0 3px rgba(59,110,240,.1)}
+.mob-pills{display:none;gap:5px;flex-wrap:wrap;padding-bottom:9px;border-bottom:1px solid var(--border)}
+.mob-pill{padding:5px 10px;border-radius:8px;border:1px solid var(--border-md);background:var(--bg);color:var(--text2);font-size:10.5px;font-weight:700;cursor:pointer;transition:all .13s;text-transform:uppercase;letter-spacing:.04em}
+.mob-pill.on{background:var(--blue);color:#fff;border-color:var(--blue)}
 .sb-list{flex:1;overflow-y:auto;padding:10px}
 .sb-empty{padding:32px 12px;text-align:center;font-size:12.5px;color:var(--text3);line-height:1.75}
-/* Entry cards in sidebar */
-.sb-card{padding:11px 13px;border-radius:10px;cursor:pointer;margin-bottom:7px;border:1px solid var(--border);background:var(--card);box-shadow:var(--sh0);transition:all .14s}
-.sb-card:hover{box-shadow:var(--sh1);transform:translateY(-1px);border-color:var(--border-md)}
-.sb-card.sel{border-color:var(--blue-bd);background:var(--blue-lt);box-shadow:var(--sh1)}
-.sc-title{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sc-sub{font-size:11px;color:var(--text3);margin-top:3px;font-family:var(--mono);display:flex;align-items:center;gap:6px}
-.sc-tag{padding:2px 7px;border-radius:6px;font-size:10px;font-weight:600;font-family:var(--mono)}
+
+/* Sidebar cards */
+.sb-card{padding:11px 13px;border-radius:10px;cursor:pointer;margin-bottom:7px;border:1px solid var(--border);background:var(--card);box-shadow:var(--sh0);transition:all .13s}
+.sb-card:hover{box-shadow:var(--sh1);transform:translateY(-1px)}
+.sb-card.sel{border-color:var(--blue-bd);background:var(--blue-lt)}
+.sc-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-meta{font-size:11px;color:var(--text3);margin-top:3px;display:flex;align-items:center;gap:6px}
+.sc-tag{padding:1px 7px;border-radius:5px;font-size:10px;font-weight:600;background:var(--blue-lt);color:var(--blue)}
 
 /* ── MAIN ── */
 .main{flex:1;overflow:hidden;display:flex;flex-direction:column;background:var(--bg)}
 
 /* Empty state */
-.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:40px 24px;text-align:center}
-.empty-icon{width:60px;height:60px;border-radius:18px;background:var(--blue-lt);display:flex;align-items:center;justify-content:center;margin:0 auto}
-.empty-icon svg{width:28px;height:28px;stroke:var(--blue);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-.empty-state h2{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.015em}
-.empty-state p{font-size:13px;color:var(--text2);max-width:320px;line-height:1.75}
-.empty-cta{padding:10px 22px;border-radius:10px;background:var(--blue);color:#fff;font-size:13px;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(59,110,240,.35);transition:all .15s}
-.empty-cta:hover{background:#2f5fd6;box-shadow:0 6px 18px rgba(59,110,240,.4)}
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px 24px;text-align:center}
+.empty-icon{width:58px;height:58px;border-radius:16px;background:var(--blue-lt);display:flex;align-items:center;justify-content:center}
+.empty-icon svg{width:26px;height:26px;stroke:var(--blue);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.empty-state h2{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.015em}
+.empty-state p{font-size:13px;color:var(--text2);max-width:300px;line-height:1.75}
+.empty-cta{padding:10px 22px;border-radius:10px;background:var(--blue);color:#fff;font-size:13px;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(59,110,240,.35);transition:all .14s}
+.empty-cta:hover{background:#2f5ad6}
 
-/* ── DOC VIEW ── */
+/* ── DOC SHELL ── */
 .doc{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.doc-header{padding:20px 24px 0;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
-.doc-title-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
-.doc-title{flex:1;font-size:20px;font-weight:800;background:transparent;border:none;color:var(--text);outline:none;letter-spacing:-.02em;font-family:var(--sans);line-height:1.2;resize:none;min-height:28px;overflow:hidden}
+.doc-hd{padding:18px 22px 0;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
+.doc-title-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
+.doc-title{flex:1;font-size:19px;font-weight:800;background:transparent;border:none;color:var(--text);outline:none;letter-spacing:-.02em;resize:none;min-height:28px;overflow:hidden;font-family:var(--sans);line-height:1.25}
 .doc-title::placeholder{color:var(--text3)}
-.doc-badge{padding:4px 11px;border-radius:20px;font-size:10.5px;font-weight:700;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;border:none;cursor:pointer;outline:none;transition:all .14s;white-space:nowrap;margin-top:4px}
-.badge-model{background:var(--blue-lt);color:var(--blue);border:1px solid var(--blue-bd)}
-.badge-concept{background:var(--purple-lt);color:var(--purple);border:1px solid rgba(114,83,224,.25)}
-.badge-rules{background:var(--green-lt);color:var(--green);border:1px solid rgba(24,160,106,.25)}
-.doc-tabs{display:flex;gap:0;padding:0 24px;background:var(--card)}
-.dtab{padding:10px 16px;font-size:11.5px;font-weight:600;color:var(--text3);cursor:pointer;border:none;background:transparent;border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:all .14s;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em}
+.doc-badge{padding:4px 11px;border-radius:20px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;border:none;cursor:default;margin-top:5px;white-space:nowrap}
+.bm{background:var(--blue-lt);color:var(--blue)}
+.bc{background:var(--green-lt);color:var(--green)}
+.br{background:rgba(220,63,63,.09);color:var(--red)}
+.doc-tabs{display:flex;padding:0 22px;background:var(--card)}
+.dtab{padding:9px 14px;font-size:11px;font-weight:700;color:var(--text3);cursor:pointer;border:none;background:transparent;border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:all .13s;text-transform:uppercase;letter-spacing:.05em}
 .dtab:hover{color:var(--text2)}
 .dtab.on{color:var(--blue);border-bottom-color:var(--blue)}
-.doc-body{flex:1;overflow-y:auto;display:flex;flex-direction:column}
-.doc-footer{padding:10px 24px;border-top:1px solid var(--border);background:var(--card);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-.footer-date{font-size:11px;color:var(--text3);font-family:var(--mono)}
-.footer-btns{display:flex;gap:8px}
-.btn-del{padding:7px 14px;border-radius:9px;border:1px solid rgba(217,64,64,.25);background:transparent;color:var(--red);font-size:12px;font-weight:600;cursor:pointer;transition:all .14s}
-.btn-del:hover{background:var(--red-lt);border-color:rgba(217,64,64,.4)}
-.btn-save{padding:7px 20px;border-radius:9px;background:var(--blue);color:#fff;font-size:12px;font-weight:700;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(59,110,240,.3);transition:all .14s}
-.btn-save:hover{background:#2f5fd6;box-shadow:0 4px 14px rgba(59,110,240,.4)}
+.doc-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-height:0}
+.doc-ft{padding:10px 22px;border-top:1px solid var(--border);background:var(--card);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.ft-info{font-size:11px;color:var(--text3)}
+.ft-btns{display:flex;gap:8px}
+.btn-del{padding:7px 14px;border-radius:9px;border:1px solid rgba(220,63,63,.25);background:transparent;color:var(--red);font-size:12px;font-weight:600;cursor:pointer;transition:all .13s}
+.btn-del:hover{background:var(--red-lt)}
+.btn-save{padding:7px 20px;border-radius:9px;background:var(--blue);color:#fff;font-size:12px;font-weight:700;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(59,110,240,.3);transition:all .13s}
+.btn-save:hover{background:#2f5ad6;box-shadow:0 4px 14px rgba(59,110,240,.4)}
+.btn-save:active{transform:scale(.97)}
 
-/* ── TAB: OVERVIEW ── */
-.overview-panel{padding:24px;display:flex;flex-direction:column;gap:16px}
-.field-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:16px 18px;box-shadow:var(--sh0);transition:box-shadow .14s,border-color .14s}
-.field-card:focus-within{box-shadow:var(--sh1);border-color:var(--blue-bd)}
-.field-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text3);font-family:var(--mono);margin-bottom:8px}
-.field-input{width:100%;background:transparent;border:none;outline:none;color:var(--text);font-size:13.5px;line-height:1.75;font-family:var(--sans);resize:none;min-height:52px}
-.field-input::placeholder{color:var(--text3)}
-.field-input-inline{width:100%;background:transparent;border:none;outline:none;color:var(--text);font-size:13.5px;font-family:var(--sans)}
-.field-input-inline::placeholder{color:var(--text3)}
+/* ── PANELS ── */
+.panel{padding:20px 22px;display:flex;flex-direction:column;gap:14px}
+.fcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:15px 17px;box-shadow:var(--sh0);transition:box-shadow .13s,border-color .13s}
+.fcard:focus-within{box-shadow:var(--sh1);border-color:var(--blue-bd)}
+.flabel{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:8px}
+.finput{width:100%;background:transparent;border:none;outline:none;color:var(--text);font-size:13.5px;line-height:1.75;font-family:var(--sans);resize:none;min-height:52px}
+.finput::placeholder{color:var(--text3)}
+.finput-sm{width:100%;background:transparent;border:none;outline:none;color:var(--text);font-size:13.5px;font-family:var(--sans)}
+.finput-sm::placeholder{color:var(--text3)}
+.fcard-red{border-color:rgba(220,63,63,.2)}
+.fcard-red:focus-within{border-color:rgba(220,63,63,.45)}
+.flabel-red{color:var(--red)}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-@media(max-width:600px){.two-col,.three-col{grid-template-columns:1fr}}
 
-/* ── TAB: SKETCH ── */
-.sketch-wrap{display:flex;flex-direction:column;height:100%;min-height:0;position:relative}
-.sketch-tb{padding:6px 10px;border-bottom:1px solid var(--border);background:var(--card);display:flex;align-items:center;gap:3px;flex-wrap:nowrap;flex-shrink:0;overflow-x:auto}
+/* ── SKETCH ── */
+.sketch-shell{display:flex;flex-direction:column;height:100%;min-height:0}
+.sketch-tb{padding:7px 12px;border-bottom:1px solid var(--border);background:var(--card);display:flex;align-items:center;gap:3px;flex-shrink:0;overflow-x:auto}
 .sketch-tb::-webkit-scrollbar{height:0}
-.stb{width:36px;height:36px;border-radius:9px;border:1px solid transparent;background:transparent;cursor:pointer;color:var(--text3);display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0;position:relative}
+.stb{width:36px;height:36px;border-radius:9px;border:1px solid transparent;background:transparent;cursor:pointer;color:var(--text3);display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0}
 .stb svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .stb:hover{background:var(--bg);color:var(--text2);border-color:var(--border)}
 .stb.on{background:var(--blue-lt);color:var(--blue);border-color:var(--blue-bd)}
-.stb-sep{width:1px;height:22px;background:var(--border);margin:0 3px;flex-shrink:0}
-.s-cpick{width:26px;height:26px;border-radius:6px;border:1px solid var(--border-md);cursor:pointer;padding:0;flex-shrink:0}
-.s-wsel{background:var(--bg);border:1px solid var(--border);color:var(--text2);font-size:11px;padding:4px 6px;border-radius:7px;cursor:pointer;outline:none;font-family:var(--mono);flex-shrink:0}
-.sketch-status{font-size:11px;color:var(--text3);padding:4px 12px;background:var(--card);border-top:1px solid var(--border);flex-shrink:0;font-family:var(--mono);min-height:24px}
-.chart-canvas{flex:1;display:block;width:100%;min-height:0;touch-action:none;cursor:crosshair}
-.ex-chart-canvas{display:block;width:100%;height:220px;touch-action:none;cursor:crosshair}
-.ex-sketch-area{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:#fafbfc}
-.ex-sketch-tb{padding:5px 8px;border-bottom:1px solid var(--border);background:var(--card);display:flex;gap:3px;align-items:center;overflow-x:auto}
-.ex-sketch-tb::-webkit-scrollbar{height:0}
+.stb-sep{width:1px;height:20px;background:var(--border);margin:0 3px;flex-shrink:0}
+.cpick{width:26px;height:26px;border-radius:7px;border:1px solid var(--border-md);cursor:pointer;padding:0;flex-shrink:0}
+.swsel{background:var(--bg);border:1px solid var(--border);color:var(--text2);font-size:11px;padding:4px 6px;border-radius:7px;cursor:pointer;outline:none;flex-shrink:0}
+.sketch-hint{font-size:11px;color:var(--text3);padding:4px 12px;background:var(--card);border-top:1px solid var(--border);flex-shrink:0;min-height:22px}
+.draw-canvas{flex:1;display:block;width:100%;min-height:0;touch-action:none;cursor:crosshair}
 
-/* ── TAB: RULES ── */
-.rules-panel{padding:20px 24px;display:flex;flex-direction:column;gap:10px}
-.rules-intro{font-size:13px;color:var(--text2);line-height:1.7;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:14px 16px;box-shadow:var(--sh0)}
-.rules-intro textarea{width:100%;background:transparent;border:none;outline:none;color:var(--text2);font-size:13px;line-height:1.75;font-family:var(--sans);resize:none;min-height:40px}
-.rules-intro textarea::placeholder{color:var(--text3)}
-.rule-item{display:flex;align-items:flex-start;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:12px 14px;box-shadow:var(--sh0);transition:all .14s}
-.rule-item:hover{box-shadow:var(--sh1);border-color:var(--border-md)}
-.rule-num{width:26px;height:26px;border-radius:7px;background:var(--blue-lt);border:1px solid var(--blue-bd);color:var(--blue);font-size:11px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+/* ── RULES ── */
+.rule-row{display:flex;align-items:flex-start;gap:9px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:11px 13px;box-shadow:var(--sh0);transition:all .13s}
+.rule-row:hover{box-shadow:var(--sh1)}
+.rule-num{width:24px;height:24px;border-radius:7px;background:var(--blue-lt);border:1px solid var(--blue-bd);color:var(--blue);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
 .rule-inp{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:13.5px;line-height:1.6;font-family:var(--sans);resize:none;min-height:24px}
 .rule-inp::placeholder{color:var(--text3)}
-.rule-rm{width:26px;height:26px;border-radius:7px;border:none;background:transparent;color:var(--text3);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:color .12s}
-.rule-rm svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+.rule-rm{width:24px;height:24px;border-radius:6px;border:none;background:transparent;color:var(--text3);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:color .12s}
+.rule-rm svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.2}
 .rule-rm:hover{color:var(--red)}
-.add-rule-btn{display:flex;align-items:center;gap:7px;padding:10px 14px;border-radius:var(--r2);border:1.5px dashed var(--border-md);background:transparent;color:var(--text3);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .14s;align-self:flex-start}
-.add-rule-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.4}
-.add-rule-btn:hover{border-color:var(--blue-bd);color:var(--blue);background:var(--blue-lt)}
+.add-btn{display:flex;align-items:center;gap:7px;padding:10px 14px;border-radius:var(--r2);border:1.5px dashed var(--border-md);background:transparent;color:var(--text3);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .13s;align-self:flex-start}
+.add-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.4}
+.add-btn:hover{border-color:var(--blue-bd);color:var(--blue);background:var(--blue-lt)}
 
-/* ── TAB: EXAMPLES ── */
-.examples-panel{padding:20px 24px;display:flex;flex-direction:column;gap:14px}
+/* ── EXAMPLES ── */
 .ex-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;box-shadow:var(--sh0)}
-.ex-card-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--card)}
-.ex-card-num{font-size:10.5px;font-weight:700;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em}
-.ex-del{width:26px;height:26px;border-radius:7px;border:none;background:transparent;color:var(--text3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:color .12s}
-.ex-del svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+.ex-hd{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.ex-num{font-size:10.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+.ex-del{width:24px;height:24px;border-radius:6px;border:none;background:transparent;color:var(--text3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:color .12s}
+.ex-del svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.2}
 .ex-del:hover{color:var(--red)}
-.ex-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
-.ex-desc{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;color:var(--text);font-size:13px;line-height:1.7;font-family:var(--sans);resize:none;min-height:60px;outline:none;transition:border-color .14s}
-.ex-desc:focus{border-color:var(--blue-bd);background:var(--card)}
+.ex-body{padding:13px 15px;display:flex;flex-direction:column;gap:10px}
+.ex-desc{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;color:var(--text);font-size:13px;line-height:1.7;font-family:var(--sans);resize:none;min-height:60px;outline:none;transition:all .13s}
+.ex-desc:focus{border-color:var(--blue-bd);background:var(--card);box-shadow:0 0 0 3px rgba(59,110,240,.1)}
 .ex-desc::placeholder{color:var(--text3)}
-.ex-sketch-area{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:#fafbfc}
-.ex-sketch-tb{padding:6px 10px;border-bottom:1px solid var(--border);background:var(--card);display:flex;gap:3px;align-items:center;flex-wrap:wrap}
-svg.ex-draw-svg{display:block;width:100%;height:220px;background:#fafbfc;cursor:crosshair;touch-action:none}
-.add-ex-btn{display:flex;align-items:center;gap:7px;padding:12px 16px;border-radius:var(--r2);border:1.5px dashed var(--border-md);background:transparent;color:var(--text3);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .14s;align-self:flex-start}
-.add-ex-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.4}
-.add-ex-btn:hover{border-color:var(--blue-bd);color:var(--blue);background:var(--blue-lt)}
 
-/* ── TAB: CONCEPT NOTE ── */
-.concept-panel{padding:24px;display:flex;flex-direction:column;gap:14px}
-.concept-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:18px 20px;box-shadow:var(--sh0);transition:box-shadow .14s,border-color .14s}
-.concept-card:focus-within{box-shadow:var(--sh1);border-color:var(--blue-bd)}
-.concept-ta{width:100%;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;line-height:1.85;font-family:var(--sans);resize:none;min-height:200px}
-.concept-ta::placeholder{color:var(--text3)}
+/* Image upload */
+.img-zone{border:1.5px dashed var(--border-md);border-radius:var(--r2);overflow:hidden;background:var(--bg);min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:all .13s;position:relative}
+.img-zone:hover{border-color:var(--blue-bd);background:var(--blue-lt)}
+.img-zone img{width:100%;height:auto;display:block;border-radius:var(--r)}
+.img-zone.has-img{border:none;min-height:0}
+.img-zone-label{font-size:12px;font-weight:600;color:var(--text3)}
+.img-zone-sub{font-size:11px;color:var(--text3)}
+.img-zone svg{width:22px;height:22px;stroke:var(--text3);fill:none;stroke-width:1.5}
+.img-file-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.img-actions{display:flex;gap:6px;margin-top:2px}
+.img-action-btn{padding:5px 10px;border-radius:7px;border:1px solid var(--border-md);background:var(--bg);color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .13s}
+.img-action-btn:hover{background:var(--card);box-shadow:var(--sh0)}
+
+/* ── SKETCH AREA IN EXAMPLES ── */
+.ex-sketch-shell{border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.ex-stb{padding:5px 8px;border-bottom:1px solid var(--border);background:var(--card);display:flex;gap:3px;align-items:center;overflow-x:auto}
+.ex-stb::-webkit-scrollbar{height:0}
+.ex-canvas{display:block;width:100%;height:200px;touch-action:none;cursor:crosshair;background:#fafbfc}
 
 /* ── MOBILE ── */
-.mob-trigger{display:none;position:fixed;top:12px;left:12px;z-index:50;width:40px;height:40px;border-radius:11px;background:var(--card);border:1px solid var(--border-md);box-shadow:var(--sh2);align-items:center;justify-content:center;cursor:pointer}
-.mob-trigger svg{width:18px;height:18px;stroke:var(--text);fill:none;stroke-width:1.9;stroke-linecap:round}
-.scrim{display:none;position:fixed;inset:0;background:rgba(10,20,40,.3);backdrop-filter:blur(2px);z-index:25;opacity:0;transition:opacity .22s}
+.mob-bar{display:none;position:fixed;top:0;left:0;right:0;height:52px;background:var(--card);border-bottom:1px solid var(--border);z-index:40;align-items:center;padding:0 14px;gap:10px;box-shadow:var(--sh0)}
+.mob-bar h1{font-size:15px;font-weight:700;flex:1}
+.ham{width:36px;height:36px;border-radius:9px;border:1px solid var(--border-md);background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.ham svg{width:16px;height:16px;stroke:var(--text);fill:none;stroke-width:1.9;stroke-linecap:round}
+.scrim{display:none;position:fixed;inset:0;background:rgba(15,23,42,.3);backdrop-filter:blur(2px);z-index:25;opacity:0;transition:opacity .22s}
 .scrim.open{display:block;opacity:1}
 
-@media(max-width:768px){
-  .mob-trigger{display:flex}
+@media(max-width:760px){
+  .mob-bar{display:flex}
   .rail{display:none}
-  .sidebar{position:fixed;inset:0 auto 0 0;transform:translateX(-100%);width:82vw;max-width:300px;box-shadow:var(--sh3)}
+  .sidebar{position:fixed;inset:0 auto 0 0;transform:translateX(-101%);width:80vw;max-width:290px;box-shadow:var(--sh3);padding-top:52px}
   .sidebar.open{transform:translateX(0)}
-  .sb-close-btn{display:flex}
+  .sb-close{display:flex}
   .mob-pills{display:flex}
-  .doc-header{padding-top:58px}
-  .doc-tabs{padding:0 14px}
-  .overview-panel,.concept-panel,.rules-panel,.examples-panel{padding:16px}
-  .doc-footer{padding:10px 16px}
-  .two-col,.three-col{grid-template-columns:1fr}
+  .main{padding-top:52px}
+  .doc-hd{padding-top:14px}
+  .panel{padding:14px}
+  .two-col{grid-template-columns:1fr}
 }
 
 /* ── TOAST ── */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(6px);background:var(--text);color:#fff;font-size:12px;font-weight:600;padding:9px 20px;border-radius:24px;opacity:0;transition:all .22s cubic-bezier(.2,.8,.2,1);pointer-events:none;z-index:999;box-shadow:var(--sh3);font-family:var(--mono);letter-spacing:.01em}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(6px);background:var(--text);color:#fff;font-size:12px;font-weight:600;padding:8px 18px;border-radius:22px;opacity:0;transition:all .22s cubic-bezier(.2,.8,.2,1);pointer-events:none;z-index:999;box-shadow:var(--sh3)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border-md);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:var(--border-hi)}
+::-webkit-scrollbar-thumb{background:var(--border-md);border-radius:2px}
 </style>
 </head>
 <body>
 
-<!-- Mobile hamburger -->
-<button class="mob-trigger" id="mobTrigger" onclick="openSidebar()">
-  <svg viewBox="0 0 22 22"><line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/></svg>
-</button>
-<div class="scrim" id="scrim" onclick="closeSidebar()"></div>
+<style>
+.install-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--blue);color:#fff;padding:12px 18px;align-items:center;gap:12px;box-shadow:0 -4px 20px rgba(59,110,240,.3)}
+.install-bar.show{display:flex}
+.install-bar-text{flex:1;font-size:13px;font-weight:600;line-height:1.4}
+.install-bar-text small{display:block;font-size:11px;font-weight:400;opacity:.8;margin-top:1px}
+.install-bar-btn{padding:8px 16px;border-radius:9px;border:none;background:#fff;color:var(--blue);font-size:12px;font-weight:800;cursor:pointer;flex-shrink:0;transition:all .13s}
+.install-bar-btn:hover{background:rgba(255,255,255,.9)}
+.install-bar-close{width:28px;height:28px;border-radius:7px;border:none;background:rgba(255,255,255,.2);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;line-height:1}
+</style>
+
+<!-- PWA Install banner -->
+<div class="install-bar" id="installBar">
+  <div class="install-bar-text">
+    Install Trading KB
+    <small>Works offline · Stays on your home screen</small>
+  </div>
+  <button class="install-bar-btn" id="installBtn" onclick="triggerInstall()">Install</button>
+  <button class="install-bar-close" onclick="dismissInstall()">×</button>
+</div>
+<div class="mob-bar">
+  <button class="ham" onclick="openSB()"><svg viewBox="0 0 20 20"><line x1="2" y1="5" x2="18" y2="5"/><line x1="2" y1="10" x2="18" y2="10"/><line x1="2" y1="15" x2="18" y2="15"/></svg></button>
+  <h1 id="mobTitle">Trading KB</h1>
+</div>
+<div class="scrim" id="scrim" onclick="closeSB()"></div>
 
 <div class="app">
 
   <!-- Rail -->
-  <nav class="rail" id="rail">
+  <nav class="rail">
     <div class="rail-logo">
       <svg viewBox="0 0 22 22"><polyline points="2,16 6,8 10,12 14,5 18,8"/><polyline points="15,5 18,5 18,8"/></svg>
     </div>
-    <button class="rail-btn on" data-sec="models" onclick="switchSec('models',this)">
-      <svg viewBox="0 0 22 22"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="12" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="12" width="7" height="7" rx="1.5"/><rect x="12" y="12" width="7" height="7" rx="1.5"/></svg>
+    <button class="rail-btn on" data-s="models" onclick="goSec('models',this)">
+      <svg viewBox="0 0 22 22"><rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="13" y="3" width="6" height="6" rx="1.5"/><rect x="3" y="13" width="6" height="6" rx="1.5"/><rect x="13" y="13" width="6" height="6" rx="1.5"/></svg>
       <span>Models</span>
     </button>
-    <button class="rail-btn" data-sec="concepts" onclick="switchSec('concepts',this)">
+    <button class="rail-btn" data-s="concepts" onclick="goSec('concepts',this)">
       <svg viewBox="0 0 22 22"><path d="M11 2a6 6 0 0 1 6 6c0 3-2 5-2 7H7c0-2-2-4-2-7a6 6 0 0 1 6-6z"/><line x1="8" y1="19" x2="14" y2="19"/><line x1="9" y1="21" x2="13" y2="21"/></svg>
       <span>Concepts</span>
     </button>
-    <button class="rail-btn" data-sec="rules" onclick="switchSec('rules',this)">
-      <svg viewBox="0 0 22 22"><line x1="8" y1="6" x2="19" y2="6"/><line x1="8" y1="11" x2="19" y2="11"/><line x1="8" y1="16" x2="19" y2="16"/><circle cx="4" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="4" cy="11" r="1.2" fill="currentColor" stroke="none"/><circle cx="4" cy="16" r="1.2" fill="currentColor" stroke="none"/></svg>
+    <button class="rail-btn" data-s="rules" onclick="goSec('rules',this)">
+      <svg viewBox="0 0 22 22"><line x1="7" y1="6" x2="18" y2="6"/><line x1="7" y1="11" x2="18" y2="11"/><line x1="7" y1="16" x2="18" y2="16"/><circle cx="3.5" cy="6" r="1.3" fill="currentColor" stroke="none"/><circle cx="3.5" cy="11" r="1.3" fill="currentColor" stroke="none"/><circle cx="3.5" cy="16" r="1.3" fill="currentColor" stroke="none"/></svg>
       <span>Rules</span>
     </button>
   </nav>
@@ -261,33 +278,32 @@ svg.ex-draw-svg{display:block;width:100%;height:220px;background:#fafbfc;cursor:
   <aside class="sidebar" id="sidebar">
     <div class="sb-top">
       <div class="sb-toprow">
-        <span class="sb-section" id="sbSecLabel">Models</span>
+        <span class="sb-label" id="sbLabel">Models</span>
         <div class="sb-actions">
           <button class="new-btn" onclick="newEntry()">
             <svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
             New
           </button>
-          <button class="sb-close-btn" id="sbCloseBtn" onclick="closeSidebar()">
+          <button class="sb-close" id="sbClose" onclick="closeSB()">
             <svg viewBox="0 0 14 14"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
           </button>
         </div>
       </div>
-      <!-- Mobile section switcher -->
       <div class="mob-pills" id="mobPills"></div>
-      <input type="text" class="sb-search" id="sbSearch" placeholder="Search…" oninput="filterList(this.value)">
+      <input class="sb-search" id="sbSearch" type="text" placeholder="Search…" oninput="filterList(this.value)">
     </div>
     <div class="sb-list" id="sbList"></div>
   </aside>
 
   <!-- Main -->
-  <main class="main" id="mainArea">
+  <main class="main" id="main">
     <div class="empty-state" id="emptyState">
       <div class="empty-icon">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        <svg viewBox="0 0 24 24"><polyline points="3,17 7,9 11,13 15,5 19,9"/><polyline points="16,5 19,5 19,8"/></svg>
       </div>
-      <h2>Your trading knowledge base</h2>
-      <p>Document your models, concepts, and rules. Come back daily to re-read and refine until every setup is second nature.</p>
-      <button class="empty-cta" onclick="newEntry()">Create your first model</button>
+      <h2>Your Trading Knowledge Base</h2>
+      <p>Document models, concepts and rules. Come back daily to re-read and refine until every setup is second nature.</p>
+      <button class="empty-cta" onclick="newEntry()">Create first entry</button>
     </div>
   </main>
 </div>
@@ -295,697 +311,235 @@ svg.ex-draw-svg{display:block;width:100%;height:220px;background:#fafbfc;cursor:
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── IndexedDB ───────────────────────────────────────────────────
+// ─── DB ──────────────────────────────────────────────────────────
 let db;
 function openDB(){
   return new Promise((res,rej)=>{
-    const req=indexedDB.open('tkb1',1);
-    req.onupgradeneeded=e=>e.target.result.createObjectStore('data',{keyPath:'key'});
-    req.onsuccess=e=>{db=e.target.result;res()};
-    req.onerror=rej;
+    const q=indexedDB.open('tkb2',1);
+    q.onupgradeneeded=e=>e.target.result.createObjectStore('kv',{keyPath:'k'});
+    q.onsuccess=e=>{db=e.target.result;res();};
+    q.onerror=rej;
   });
 }
-function dbGet(k){return new Promise((res,rej)=>{const r=db.transaction('data','readonly').objectStore('data').get(k);r.onsuccess=e=>res(e.target.result?.value??null);r.onerror=rej})}
-function dbSet(k,v){return new Promise((res,rej)=>{const tx=db.transaction('data','readwrite');tx.objectStore('data').put({key:k,value:v});tx.oncomplete=res;tx.onerror=rej})}
+function dbGet(k){return new Promise((res,rej)=>{const r=db.transaction('kv','readonly').objectStore('kv').get(k);r.onsuccess=e=>res(e.target.result?.v??null);r.onerror=rej;});}
+function dbSet(k,v){return new Promise((res,rej)=>{const tx=db.transaction('kv','readwrite');tx.objectStore('kv').put({k,v});tx.oncomplete=res;tx.onerror=rej;});}
 
-// ─── State ───────────────────────────────────────────────────────
+// ─── STATE ───────────────────────────────────────────────────────
 let sec='models';
 let store={models:[],concepts:[],rules:[]};
 let sel=null;
-let activeDocTab={models:'overview',concepts:'concept',rules:'rules'};
-// per-entry active example sketch tool tracking
-let activeSketches={};
+let docTab={models:'overview',concepts:'notes',rules:'rules'};
+const SEC={models:{label:'Models',badge:'bm',tabs:['overview','sketch','examples']},
+           concepts:{label:'Concepts',badge:'bc',tabs:['notes','sketch']},
+           rules:{label:'Rules',badge:'br',tabs:['rules']}};
 
-const SEC_LABELS={models:'Models',concepts:'Concepts',rules:'Rules'};
-const SEC_COLORS={models:'badge-model',concepts:'badge-concept',rules:'badge-rules'};
-
-const TABS={
-  models:[{id:'overview',label:'Overview'},{id:'sketch',label:'Sketch'},{id:'examples',label:'Examples'}],
-  concepts:[{id:'concept',label:'Notes'},{id:'sketch',label:'Sketch'}],
-  rules:[{id:'rules',label:'Rules'}]
-};
-
-// ─── Init ────────────────────────────────────────────────────────
+// ─── INIT ────────────────────────────────────────────────────────
 async function init(){
   await openDB();
   for(const k of Object.keys(store)){
     try{const v=await dbGet('tkb-'+k);if(v)store[k]=JSON.parse(v);}catch(e){}
   }
-  renderMobPills();
-  renderList();
+  renderPills();renderList();
 }
+async function persist(){await dbSet('tkb-'+sec,JSON.stringify(store[sec]));}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2000);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function ar(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
 
-async function persist(){
-  await dbSet('tkb-'+sec,JSON.stringify(store[sec]));
-}
-
-function toast(msg){
-  const el=document.getElementById('toast');
-  el.textContent=msg;el.classList.add('show');
-  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),1800);
-}
-
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-
-// ─── Navigation ──────────────────────────────────────────────────
-function switchSec(s,btn){
+// ─── SECTION NAV ─────────────────────────────────────────────────
+function goSec(s,btn){
   sec=s;sel=null;
-  document.querySelectorAll('.rail-btn').forEach(b=>b.classList.toggle('on',b.dataset.sec===s));
-  document.getElementById('sbSecLabel').textContent=SEC_LABELS[s];
+  document.querySelectorAll('.rail-btn').forEach(b=>b.classList.toggle('on',b.dataset.s===s));
+  document.getElementById('sbLabel').textContent=SEC[s].label;
   document.getElementById('sbSearch').value='';
-  renderMobPills();renderList();renderMain();
+  document.getElementById('mobTitle').textContent=SEC[s].label;
+  renderPills();renderList();renderMain();
 }
-
-function renderMobPills(){
-  const el=document.getElementById('mobPills');
-  el.innerHTML=Object.keys(SEC_LABELS).map(k=>
-    `<button class="mob-pill ${k===sec?'on':''}" onclick="switchSecMob('${k}')">${SEC_LABELS[k]}</button>`
+function renderPills(){
+  document.getElementById('mobPills').innerHTML=Object.keys(SEC).map(k=>
+    `<button class="mob-pill ${k===sec?'on':''}" onclick="goSecMob('${k}')">${SEC[k].label}</button>`
   ).join('');
 }
-function switchSecMob(s){
+function goSecMob(s){
   sec=s;sel=null;
-  document.querySelectorAll('.rail-btn').forEach(b=>b.classList.toggle('on',b.dataset.sec===s));
-  document.getElementById('sbSecLabel').textContent=SEC_LABELS[s];
+  document.querySelectorAll('.rail-btn').forEach(b=>b.classList.toggle('on',b.dataset.s===s));
+  document.getElementById('sbLabel').textContent=SEC[s].label;
+  document.getElementById('mobTitle').textContent=SEC[s].label;
   document.getElementById('sbSearch').value='';
-  renderMobPills();renderList();renderMain();
+  renderPills();renderList();renderMain();
 }
 
-// ─── Sidebar open/close (mobile) ─────────────────────────────────
-function openSidebar(){
-  document.getElementById('sidebar').classList.add('open');
-  document.getElementById('scrim').classList.add('open');
-}
-function closeSidebar(){
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('scrim').classList.remove('open');
-}
+// ─── SIDEBAR ─────────────────────────────────────────────────────
+function openSB(){document.getElementById('sidebar').classList.add('open');document.getElementById('scrim').classList.add('open');}
+function closeSB(){document.getElementById('sidebar').classList.remove('open');document.getElementById('scrim').classList.remove('open');}
 
-// ─── Sidebar list ────────────────────────────────────────────────
 function renderList(filter=''){
   const el=document.getElementById('sbList');
   let items=store[sec];
   if(filter)items=items.filter(i=>(i.title||'').toLowerCase().includes(filter.toLowerCase()));
   if(!items.length){
-    const msg=filter?'No results.':sec==='models'?'No models yet. Hit New to create your first setup.':sec==='concepts'?'No concepts yet.':'No rule sets yet.';
-    el.innerHTML=`<div class="sb-empty">${msg}</div>`;return;
+    el.innerHTML=`<div class="sb-empty">${filter?'No results.':'Nothing here yet — hit New to start.'}</div>`;return;
   }
   el.innerHTML=items.map(it=>`
-    <div class="sb-card ${sel&&sel.id===it.id?'sel':''}" onclick="selectEntry(${it.id})">
-      <div class="sc-title">${esc(it.title)||'Untitled'}</div>
-      <div class="sc-sub">
-        ${it.tag?`<span class="sc-tag" style="background:var(--blue-lt);color:var(--blue)">${esc(it.tag)}</span>`:''}
+    <div class="sb-card ${sel&&sel.id===it.id?'sel':''}" onclick="pick(${it.id})">
+      <div class="sc-name">${esc(it.title)||'Untitled'}</div>
+      <div class="sc-meta">${it.tag?`<span class="sc-tag">${esc(it.tag)}</span>`:''}
         <span>${it.date||''}</span>
       </div>
     </div>`).join('');
 }
-function filterList(v){renderList(v)}
-
-function selectEntry(id){
+function filterList(v){renderList(v);}
+function pick(id){
   sel=store[sec].find(x=>x.id===id)||null;
   renderList();renderMain();
-  if(window.innerWidth<=768)closeSidebar();
+  if(window.innerWidth<=760)closeSB();
 }
 
-// ─── New entry ───────────────────────────────────────────────────
+// ─── NEW ENTRY ───────────────────────────────────────────────────
 function newEntry(){
   const it={
-    id:Date.now(),
-    title:'',
-    tag:'',
+    id:Date.now(),title:'',tag:'',
     date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),
-    // model fields
-    description:'',
-    market_structure:'',
-    entry_trigger:'',
-    confluences:'',
-    invalidation:'',
-    sl_logic:'',
-    target_logic:'',
-    sketch:'',
-    examples:[],
-    // concept fields
-    concept_notes:'',
-    concept_sketch:'',
-    // rules fields
-    rules_intro:'',
-    rules:[]
+    // model
+    description:'',market_structure:'',entry_trigger:'',
+    confluences:'',invalidation:'',sl_logic:'',target_logic:'',
+    sketch:'',examples:[],
+    // concept
+    concept_notes:'',concept_sketch:'',
+    // rules
+    rules_intro:'',rules:[{t:''},{t:''},{t:''}]
   };
-  if(sec==='rules')it.rules=[{t:''},{t:''},{t:''}];
   store[sec].unshift(it);sel=it;
   persist();renderList();renderMain();
-  if(window.innerWidth<=768)closeSidebar();
+  if(window.innerWidth<=760)closeSB();
 }
-
 async function deleteEntry(){
   if(!sel||!confirm('Delete this entry?'))return;
   store[sec]=store[sec].filter(x=>x.id!==sel.id);
   sel=null;await persist();renderList();renderMain();
 }
 
-// ─── Main area ───────────────────────────────────────────────────
+// ─── MAIN RENDER ─────────────────────────────────────────────────
 function renderMain(){
-  const el=document.getElementById('mainArea');
+  const el=document.getElementById('main');
   if(!sel){
     el.innerHTML=`<div class="empty-state">
-      <div class="empty-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-      </div>
-      <h2>${SEC_LABELS[sec]}</h2>
-      <p>${{models:'Select a model or create a new one to start documenting your setup.',concepts:'Select a concept or create a new one to document your foundational ideas.',rules:'Select a rule set or create a new one to write and refine your trading rules.'}[sec]}</p>
-      <button class="empty-cta" onclick="newEntry()">New ${SEC_LABELS[sec].slice(0,-1)}</button>
+      <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,17 7,9 11,13 15,5 19,9"/><polyline points="16,5 19,5 19,8"/></svg></div>
+      <h2>${SEC[sec].label}</h2>
+      <p>${{models:'Select a model or create a new one.',concepts:'Select a concept or create a new one.',rules:'Select a rule set or create a new one.'}[sec]}</p>
+      <button class="empty-cta" onclick="newEntry()">New ${SEC[sec].label.slice(0,-1)}</button>
     </div>`;return;
   }
-  const tabs=TABS[sec];
-  const ct=activeDocTab[sec]||tabs[0].id;
-  el.innerHTML=`
-  <div class="doc">
-    <div class="doc-header">
+  const tabs=SEC[sec].tabs;
+  const ct=docTab[sec]||tabs[0];
+  el.innerHTML=`<div class="doc">
+    <div class="doc-hd">
       <div class="doc-title-row">
-        <textarea class="doc-title" id="docTitle" rows="1" placeholder="${sec==='models'?'Model name…':sec==='concepts'?'Concept name…':'Rule set name…'}" oninput="sel.title=this.value;autoResize(this);renderList()">${esc(sel.title)}</textarea>
-        <span class="doc-badge ${SEC_COLORS[sec]}">${sec==='models'?'Model':sec==='concepts'?'Concept':'Rules'}</span>
+        <textarea class="doc-title" id="docTitle" rows="1"
+          placeholder="${sec==='models'?'Model name…':sec==='concepts'?'Concept name…':'Rule set name…'}"
+          oninput="sel.title=this.value;ar(this);renderList()">${esc(sel.title)}</textarea>
+        <span class="doc-badge ${SEC[sec].badge}">${SEC[sec].label.slice(0,-1)}</span>
       </div>
     </div>
     <div class="doc-tabs">
-      ${tabs.map(t=>`<button class="dtab ${ct===t.id?'on':''}" onclick="switchDocTab('${t.id}',this)">${t.label}</button>`).join('')}
+      ${tabs.map(t=>`<button class="dtab ${t===ct?'on':''}" onclick="switchTab('${t}',this)">${{overview:'Overview',sketch:'Sketch',examples:'Examples',notes:'Notes',rules:'Rules'}[t]}</button>`).join('')}
     </div>
     <div class="doc-body" id="docBody"></div>
-    <div class="doc-footer">
-      <span class="footer-date">${sel.date}</span>
-      <div class="footer-btns">
+    <div class="doc-ft">
+      <span class="ft-info">${sel.date}</span>
+      <div class="ft-btns">
         <button class="btn-del" onclick="deleteEntry()">Delete</button>
         <button class="btn-save" onclick="saveEntry()">Save</button>
       </div>
     </div>
   </div>`;
-  renderDocBody(ct);
-  setTimeout(()=>{const t=document.getElementById('docTitle');if(t)autoResize(t)},0);
+  renderTab(ct);
+  setTimeout(()=>{const t=document.getElementById('docTitle');if(t)ar(t);},0);
 }
 
-function autoResize(el){el.style.height='auto';el.style.height=el.scrollHeight+'px'}
-
-function switchDocTab(t,btn){
-  activeDocTab[sec]=t;
+function switchTab(t,btn){
+  // Save sketch before switching away
+  const old=docTab[sec];
+  if(old==='sketch') captureSketch();
+  docTab[sec]=t;
   document.querySelectorAll('.dtab').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
-  renderDocBody(t);
+  renderTab(t);
 }
 
-function renderDocBody(t){
+function renderTab(t){
   const el=document.getElementById('docBody');if(!el)return;
-  const renders={
-    overview:()=>renderOverview(el),
-    sketch:()=>renderSketch(el,'main'),
-    examples:()=>renderExamples(el),
-    concept:()=>renderConcept(el),
-    rules:()=>renderRules(el)
-  };
-  (renders[t]||renders.overview)();
+  if(t==='overview') renderOverview(el);
+  else if(t==='sketch') renderSketch(el);
+  else if(t==='examples') renderExamples(el);
+  else if(t==='notes') renderNotes(el);
+  else if(t==='rules') renderRules(el);
 }
 
-// ─── OVERVIEW (Models) ───────────────────────────────────────────
+// ─── OVERVIEW ────────────────────────────────────────────────────
 function renderOverview(el){
-  const S=sel;
-  el.innerHTML=`<div class="overview-panel">
-    <div class="field-card">
-      <div class="field-label">Description</div>
-      <textarea class="field-input" placeholder="Describe this setup in your own words — what it is, what it looks like in real time, why it works…" oninput="sel.description=this.value" rows="4">${esc(S.description)}</textarea>
+  el.innerHTML=`<div class="panel">
+    <div class="fcard">
+      <div class="flabel">Description</div>
+      <textarea class="finput" rows="4" placeholder="Describe this setup in your own words — what it is, what it looks like in real time, why it works…" oninput="sel.description=this.value">${esc(sel.description)}</textarea>
     </div>
-    <div class="field-card">
-      <div class="field-label">Market structure required</div>
-      <textarea class="field-input" placeholder="What must the higher timeframe structure look like before this setup is valid?" oninput="sel.market_structure=this.value" rows="3">${esc(S.market_structure)}</textarea>
-    </div>
-    <div class="two-col">
-      <div class="field-card">
-        <div class="field-label">Entry trigger</div>
-        <textarea class="field-input" placeholder="The exact condition that triggers your entry — what must happen?" oninput="sel.entry_trigger=this.value" rows="3">${esc(S.entry_trigger)}</textarea>
-      </div>
-      <div class="field-card">
-        <div class="field-label">Confluences</div>
-        <textarea class="field-input" placeholder="What additional factors stack the odds in your favour?" oninput="sel.confluences=this.value" rows="3">${esc(S.confluences)}</textarea>
-      </div>
+    <div class="fcard">
+      <div class="flabel">Market structure required</div>
+      <textarea class="finput" rows="3" placeholder="What must the higher timeframe structure look like before this setup is valid?" oninput="sel.market_structure=this.value">${esc(sel.market_structure)}</textarea>
     </div>
     <div class="two-col">
-      <div class="field-card">
-        <div class="field-label">Stop loss logic</div>
-        <textarea class="field-input" placeholder="Where does your stop go and why?" oninput="sel.sl_logic=this.value" rows="3">${esc(S.sl_logic)}</textarea>
+      <div class="fcard">
+        <div class="flabel">Entry trigger</div>
+        <textarea class="finput" rows="3" placeholder="The exact condition that triggers your entry…" oninput="sel.entry_trigger=this.value">${esc(sel.entry_trigger)}</textarea>
       </div>
-      <div class="field-card">
-        <div class="field-label">Target logic</div>
-        <textarea class="field-input" placeholder="Where do you take profit and why?" oninput="sel.target_logic=this.value" rows="3">${esc(S.target_logic)}</textarea>
+      <div class="fcard">
+        <div class="flabel">Confluences</div>
+        <textarea class="finput" rows="3" placeholder="What stacks the odds in your favour?" oninput="sel.confluences=this.value">${esc(sel.confluences)}</textarea>
       </div>
     </div>
-    <div class="field-card" style="border-color:rgba(217,64,64,.25)">
-      <div class="field-label" style="color:var(--red)">What invalidates this setup</div>
-      <textarea class="field-input" placeholder="What price action tells you this setup is off? What makes you stand aside?" oninput="sel.invalidation=this.value" rows="3">${esc(S.invalidation)}</textarea>
+    <div class="two-col">
+      <div class="fcard">
+        <div class="flabel">Stop loss logic</div>
+        <textarea class="finput" rows="3" placeholder="Where does your stop go and why?" oninput="sel.sl_logic=this.value">${esc(sel.sl_logic)}</textarea>
+      </div>
+      <div class="fcard">
+        <div class="flabel">Target logic</div>
+        <textarea class="finput" rows="3" placeholder="Where do you take profit and why?" oninput="sel.target_logic=this.value">${esc(sel.target_logic)}</textarea>
+      </div>
     </div>
-    <div class="field-card">
-      <div class="field-label">Tag / nickname</div>
-      <input type="text" class="field-input-inline" placeholder="e.g. FVG reversal, OB pullback, MSS entry…" value="${esc(S.tag)}" oninput="sel.tag=this.value;renderList()">
+    <div class="fcard fcard-red">
+      <div class="flabel flabel-red">Invalidation</div>
+      <textarea class="finput" rows="3" placeholder="What price action tells you this setup is off?" oninput="sel.invalidation=this.value">${esc(sel.invalidation)}</textarea>
     </div>
-  </div>`;
-}
-
-// ─── CONCEPT (Concepts) ──────────────────────────────────────────
-function renderConcept(el){
-  el.innerHTML=`<div class="concept-panel">
-    <div class="concept-card">
-      <div class="field-label" style="margin-bottom:10px">Concept notes</div>
-      <textarea class="concept-ta" placeholder="Explain this concept in your own words. How do you define it? How do you identify it? Why does it matter in your system?
-
-Don't copy from books — write it the way you understand it. The goal is that when you re-read this tomorrow, it instantly clicks." oninput="sel.concept_notes=this.value">${esc(sel.concept_notes)}</textarea>
+    <div class="fcard">
+      <div class="flabel">Tag</div>
+      <input type="text" class="finput-sm" placeholder="e.g. FVG reversal, OB pullback…" value="${esc(sel.tag)}" oninput="sel.tag=this.value;renderList()">
     </div>
   </div>`;
 }
 
-// ─── DRAWING ENGINE ──────────────────────────────────────────────
-// Professional Canvas 2D drawing system — Stage 1
-// TradingView-style: Trendline, Path, Rectangle
-// Price/time coordinate space, draggable handles, undo/redo
+// ─── NOTES (concepts) ────────────────────────────────────────────
+function renderNotes(el){
+  el.innerHTML=`<div class="panel">
+    <div class="fcard" style="flex:1">
+      <div class="flabel">Concept notes</div>
+      <textarea class="finput" style="min-height:280px" placeholder="Explain this concept in your own words. How do you define it? How do you identify it on a chart? Why does it matter in your system?
 
-const HIT_R      = 12;   // touch hit tolerance px
-const HANDLE_R   = 5.5;  // visual handle radius
-const HANDLE_HIT = 14;   // handle touch hit radius
-const GRID_CLR   = 'rgba(10,20,40,.06)';
-const AXIS_CLR   = 'rgba(10,20,40,.4)';
-const AXIS_BG    = '#f0f2f5';
-const CVS_BG     = '#fafbfc';
-const PRICE_W    = 54;
-const TIME_H     = 20;
-const SEL_CLR    = '#3b6ef0';
-
-class DrawingChart {
-  constructor(canvas, jsonData) {
-    this.cv      = canvas;
-    this.ctx     = canvas.getContext('2d');
-    this.drawings= jsonData ? JSON.parse(jsonData) : [];
-    this.tool    = 'trendline';
-    this.color   = '#ef5350';
-    this.sw      = 2;
-    this.ls      = 'solid';
-    this.selId   = null;
-    this.hoverId = null;
-    this.dragCtx = null;
-    this.ds      = null;   // draw state
-    this.hist    = [];
-    this.fut     = [];
-    this._dirty  = true;
-    this._raf    = null;
-    this.vp      = {pMin:0,pMax:100,tMin:0,tMax:100};
-    this._resize();
-    this._bind();
-    this._loop();
-  }
-
-  get W(){ return this.cv.width/(window.devicePixelRatio||1); }
-  get H(){ return this.cv.height/(window.devicePixelRatio||1); }
-  get dW(){ return this.W - PRICE_W; }
-  get dH(){ return this.H - TIME_H; }
-
-  toP(cx,cy){
-    const v=this.vp;
-    return{x:(cx-v.tMin)/(v.tMax-v.tMin)*this.dW,
-           y:(v.pMax-cy)/(v.pMax-v.pMin)*this.dH};
-  }
-  fromP(px,py){
-    const v=this.vp;
-    return{x:px/this.dW*(v.tMax-v.tMin)+v.tMin,
-           y:v.pMax-py/this.dH*(v.pMax-v.pMin)};
-  }
-
-  _resize(){
-    const dpr=window.devicePixelRatio||1;
-    const r=this.cv.getBoundingClientRect();
-    if(!r.width) return;
-    this.cv.width=r.width*dpr; this.cv.height=r.height*dpr;
-    this.ctx.scale(dpr,dpr);
-    this._dirty=true;
-  }
-
-  _loop(){
-    this._raf=requestAnimationFrame(()=>this._loop());
-    if(!this._dirty) return;
-    this._dirty=false;
-    this._render();
-  }
-
-  dirty(){ this._dirty=true; }
-
-  _render(){
-    const ctx=this.ctx,W=this.W,H=this.H;
-    ctx.clearRect(0,0,W,H);
-    ctx.fillStyle=CVS_BG; ctx.fillRect(0,0,this.dW,this.dH);
-    this._grid();
-    ctx.save();
-    ctx.beginPath(); ctx.rect(0,0,this.dW,this.dH); ctx.clip();
-    this.drawings.forEach(d=>{
-      this._draw(d,d.id===this.selId,d.id===this.hoverId&&d.id!==this.selId);
-    });
-    if(this.ds) this._drawLive();
-    ctx.restore();
-    this._axes();
-  }
-
-  _grid(){
-    const ctx=this.ctx;
-    ctx.strokeStyle=GRID_CLR; ctx.lineWidth=0.5;
-    for(let i=1;i<8;i++){const x=i/8*this.dW;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,this.dH);ctx.stroke();}
-    for(let i=1;i<6;i++){const y=i/6*this.dH;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(this.dW,y);ctx.stroke();}
-  }
-
-  _axes(){
-    const ctx=this.ctx,v=this.vp;
-    ctx.fillStyle=AXIS_BG;
-    ctx.fillRect(this.dW,0,PRICE_W,this.H);
-    ctx.fillRect(0,this.dH,this.dW,TIME_H);
-    ctx.strokeStyle=AXIS_CLR; ctx.lineWidth=0.5; ctx.setLineDash([]);
-    ctx.beginPath();ctx.moveTo(this.dW,0);ctx.lineTo(this.dW,this.dH);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(0,this.dH);ctx.lineTo(this.dW,this.dH);ctx.stroke();
-    ctx.fillStyle=AXIS_CLR; ctx.font='10px monospace';
-    ctx.textAlign='left';
-    for(let i=0;i<=6;i++){
-      const cy=v.pMin+i/6*(v.pMax-v.pMin);
-      const py=this.dH-i/6*this.dH;
-      ctx.fillText(cy.toFixed(1),this.dW+5,py+4);
-    }
-    ctx.textAlign='center';
-    for(let i=0;i<=8;i++){
-      const cx=v.tMin+i/8*(v.tMax-v.tMin);
-      ctx.fillText(cx.toFixed(0),i/8*this.dW,this.dH+14);
-    }
-  }
-
-  _setStroke(ctx,color,w,ls,sel){
-    ctx.strokeStyle=sel?SEL_CLR:color;
-    ctx.lineWidth=sel?w+1:w;
-    ctx.lineCap='round'; ctx.lineJoin='round';
-    if(ls==='dashed') ctx.setLineDash([w*4,w*3]);
-    else if(ls==='dotted') ctx.setLineDash([w,w*2]);
-    else ctx.setLineDash([]);
-  }
-
-  _draw(d,sel,hov){
-    const ctx=this.ctx;
-    ctx.globalAlpha=hov?0.65:1;
-    if(d.type==='trendline'){
-      const p1=this.toP(d.x1,d.y1),p2=this.toP(d.x2,d.y2);
-      this._setStroke(ctx,d.color,d.w,d.ls,sel);
-      ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();
-      ctx.setLineDash([]);
-      if(sel||hov){this._handle(p1.x,p1.y,sel);this._handle(p2.x,p2.y,sel);}
-    } else if(d.type==='path'){
-      if(d.pts.length<2){ctx.globalAlpha=1;return;}
-      this._setStroke(ctx,d.color,d.w,d.ls,sel);
-      ctx.beginPath();
-      const p0=this.toP(d.pts[0].x,d.pts[0].y);ctx.moveTo(p0.x,p0.y);
-      d.pts.slice(1).forEach(pt=>{const p=this.toP(pt.x,pt.y);ctx.lineTo(p.x,p.y);});
-      ctx.stroke(); ctx.setLineDash([]);
-      if(sel||hov) d.pts.forEach(pt=>{const p=this.toP(pt.x,pt.y);this._handle(p.x,p.y,sel);});
-    } else if(d.type==='rect'){
-      const p1=this.toP(d.x1,d.y1),p2=this.toP(d.x2,d.y2);
-      const rx=Math.min(p1.x,p2.x),ry=Math.min(p1.y,p2.y);
-      const rw=Math.abs(p2.x-p1.x),rh=Math.abs(p2.y-p1.y);
-      ctx.fillStyle=d.color; ctx.globalAlpha*=0.09;
-      ctx.fillRect(rx,ry,rw,rh);
-      ctx.globalAlpha=hov?0.65:1;
-      this._setStroke(ctx,d.color,d.w,d.ls,sel);
-      ctx.strokeRect(rx,ry,rw,rh); ctx.setLineDash([]);
-      if(sel||hov){
-        const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
-        [[p1.x,p1.y],[p2.x,p1.y],[p2.x,p2.y],[p1.x,p2.y],
-         [mx,p1.y],[p2.x,my],[mx,p2.y],[p1.x,my],[mx,my]]
-        .forEach(([x,y])=>this._handle(x,y,sel));
-      }
-    }
-    ctx.globalAlpha=1;
-  }
-
-  _handle(x,y,sel){
-    const ctx=this.ctx;
-    ctx.beginPath();ctx.arc(x,y,HANDLE_R,0,Math.PI*2);
-    ctx.fillStyle='#fff';ctx.fill();
-    ctx.strokeStyle=sel?SEL_CLR:'#555';
-    ctx.lineWidth=1.5;ctx.setLineDash([]);ctx.stroke();
-  }
-
-  _drawLive(){
-    const ds=this.ds,ctx=this.ctx;
-    if(!ds||!ds.pts.length) return;
-    ctx.globalAlpha=0.7;
-    const fake={id:'__live',type:ds.tool,color:this.color,w:this.sw,ls:this.ls,
-      pts:ds.pts,x1:ds.pts[0].x,y1:ds.pts[0].y,
-      x2:(ds.pts[1]||ds.pts[0]).x,y2:(ds.pts[1]||ds.pts[0]).y};
-    this._draw(fake,false,false);
-    ctx.globalAlpha=1;
-  }
-
-  _bind(){
-    const cv=this.cv;
-    const gp=e=>{const r=cv.getBoundingClientRect();const s=e.touches?e.touches[0]:e;return{x:s.clientX-r.left,y:s.clientY-r.top};};
-    const ge=e=>{const r=cv.getBoundingClientRect();const s=e.changedTouches[0];return{x:s.clientX-r.left,y:s.clientY-r.top};};
-    cv.addEventListener('mousedown', e=>{if(e.button===0)this._down(gp(e));});
-    cv.addEventListener('mousemove', e=>this._move(gp(e)));
-    cv.addEventListener('mouseup',   e=>{if(e.button===0)this._up(gp(e));});
-    cv.addEventListener('dblclick',  e=>this._dbl(gp(e)));
-    cv.addEventListener('touchstart',e=>{e.preventDefault();this._down(gp(e));},{passive:false});
-    cv.addEventListener('touchmove', e=>{e.preventDefault();this._move(gp(e));},{passive:false});
-    cv.addEventListener('touchend',  e=>{e.preventDefault();this._up(ge(e));},{passive:false});
-    const ro=new ResizeObserver(()=>{this._resize();this.dirty();});ro.observe(cv);
-    this._keyFn=e=>{
-      if(!document.getElementById(this.cv.id)) return;
-      if(e.key==='Escape'){this.ds=null;this.selId=null;this.dirty();}
-      if(e.key==='Enter') this._finish();
-      if((e.key==='Delete'||e.key==='Backspace')&&this.selId) this._del();
-      if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();this.undo();}
-      if((e.ctrlKey||e.metaKey)&&e.key==='y'){e.preventDefault();this.redo();}
-    };
-    window.addEventListener('keydown',this._keyFn);
-  }
-
-  _down(p){
-    if(p.x>this.dW||p.y>this.dH) return;
-    // drawing in progress?
-    if(this.ds){ this._click(p); return; }
-    // hit handle on selected?
-    if(this.selId){
-      const hi=this._hitHandle(this.selId,p);
-      if(hi!==-1){
-        this._ph();
-        this.dragCtx={type:'handle',id:this.selId,hi,orig:JSON.parse(JSON.stringify(this.drawings.find(x=>x.id===this.selId))),sp:this.fromP(p.x,p.y)};
-        return;
-      }
-    }
-    // hit body?
-    const hit=this._hitBody(p);
-    if(hit){
-      this.selId=hit.id;this._ph();
-      this.dragCtx={type:'body',id:hit.id,orig:JSON.parse(JSON.stringify(hit)),sp:this.fromP(p.x,p.y)};
-      this.dirty();return;
-    }
-    // start new drawing
-    this.selId=null;
-    const cp=this.fromP(p.x,p.y);
-    if(this.tool==='trendline') this.ds={tool:'trendline',pts:[{...cp},{...cp}]};
-    else if(this.tool==='path') this.ds={tool:'path',pts:[{...cp},{...cp}]};
-    else if(this.tool==='rect') this.ds={tool:'rect',pts:[{...cp},{...cp}]};
-    this.dirty();
-  }
-
-  _move(p){
-    const cp=this.fromP(p.x,p.y);
-    if(this.dragCtx){
-      const d=this.drawings.find(x=>x.id===this.dragCtx.id);
-      if(d){
-        if(this.dragCtx.type==='handle'){
-          this._mh(d,this.dragCtx.hi,cp);
-        } else {
-          const dx=cp.x-this.dragCtx.sp.x,dy=cp.y-this.dragCtx.sp.y;
-          this._tr(d,this.dragCtx.orig,dx,dy);
-        }
-      }
-      this.dirty();return;
-    }
-    if(this.ds){
-      const pts=this.ds.pts;
-      pts[pts.length-1]={...cp};
-      this.dirty();return;
-    }
-    const hit=this._hitBody(p);
-    const nh=hit?hit.id:null;
-    if(nh!==this.hoverId){this.hoverId=nh;this.dirty();}
-    this.cv.style.cursor=hit?'move':'crosshair';
-  }
-
-  _up(p){
-    if(this.dragCtx){this.dragCtx=null;this.fut=[];}
-  }
-
-  _dbl(p){if(this.ds?.tool==='path')this._finish();}
-
-  _click(p){
-    const cp=this.fromP(p.x,p.y),ds=this.ds;
-    if(ds.tool==='trendline'){ds.pts[1]={...cp};this._commit();}
-    else if(ds.tool==='rect'){ds.pts[1]={...cp};this._commit();}
-    else if(ds.tool==='path'){
-      ds.pts[ds.pts.length-1]={...cp};
-      ds.pts.push({...cp});
-    }
-  }
-
-  _finish(){
-    if(!this.ds) return;
-    if(this.ds.tool==='path'&&this.ds.pts.length>2){this.ds.pts.pop();this._commit();}
-    else{this.ds=null;this.dirty();}
-  }
-
-  _commit(){
-    const ds=this.ds;this._ph();
-    const id='d'+Date.now()+Math.random().toString(36).slice(2,5);
-    let d;
-    if(ds.tool==='trendline') d={id,type:'trendline',color:this.color,w:this.sw,ls:this.ls,x1:ds.pts[0].x,y1:ds.pts[0].y,x2:ds.pts[1].x,y2:ds.pts[1].y};
-    else if(ds.tool==='path') d={id,type:'path',color:this.color,w:this.sw,ls:this.ls,pts:[...ds.pts]};
-    else if(ds.tool==='rect') d={id,type:'rect',color:this.color,w:this.sw,ls:this.ls,x1:ds.pts[0].x,y1:ds.pts[0].y,x2:ds.pts[1].x,y2:ds.pts[1].y};
-    this.drawings.push(d);this.selId=id;this.ds=null;this.fut=[];this.dirty();
-  }
-
-  _hitBody(p){
-    for(let i=this.drawings.length-1;i>=0;i--){
-      const d=this.drawings[i];
-      if(d.type==='trendline'){
-        const p1=this.toP(d.x1,d.y1),p2=this.toP(d.x2,d.y2);
-        if(this._dSeg(p,p1,p2)<HIT_R) return d;
-      } else if(d.type==='path'){
-        for(let j=0;j<d.pts.length-1;j++){
-          const a=this.toP(d.pts[j].x,d.pts[j].y),b=this.toP(d.pts[j+1].x,d.pts[j+1].y);
-          if(this._dSeg(p,a,b)<HIT_R) return d;
-        }
-      } else if(d.type==='rect'){
-        const p1=this.toP(d.x1,d.y1),p2=this.toP(d.x2,d.y2);
-        const rx=Math.min(p1.x,p2.x)-HIT_R,ry=Math.min(p1.y,p2.y)-HIT_R;
-        const rw=Math.abs(p2.x-p1.x)+HIT_R*2,rh=Math.abs(p2.y-p1.y)+HIT_R*2;
-        if(p.x>=rx&&p.x<=rx+rw&&p.y>=ry&&p.y<=ry+rh) return d;
-      }
-    }
-    return null;
-  }
-
-  _dSeg(p,a,b){
-    const dx=b.x-a.x,dy=b.y-a.y;
-    if(!dx&&!dy) return Math.hypot(p.x-a.x,p.y-a.y);
-    const t=Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/(dx*dx+dy*dy)));
-    return Math.hypot(p.x-(a.x+t*dx),p.y-(a.y+t*dy));
-  }
-
-  _hitHandle(id,p){
-    const d=this.drawings.find(x=>x.id===id);if(!d) return -1;
-    const hs=d.type==='trendline'?[{x:d.x1,y:d.y1},{x:d.x2,y:d.y2}]
-      :d.type==='path'?d.pts
-      :d.type==='rect'?[{x:d.x1,y:d.y1},{x:d.x2,y:d.y1},{x:d.x2,y:d.y2},{x:d.x1,y:d.y2},
-          {x:(d.x1+d.x2)/2,y:d.y1},{x:d.x2,y:(d.y1+d.y2)/2},{x:(d.x1+d.x2)/2,y:d.y2},
-          {x:d.x1,y:(d.y1+d.y2)/2},{x:(d.x1+d.x2)/2,y:(d.y1+d.y2)/2}]:[];
-    for(let i=0;i<hs.length;i++){
-      const hp=this.toP(hs[i].x,hs[i].y);
-      if(Math.hypot(p.x-hp.x,p.y-hp.y)<HANDLE_HIT) return i;
-    }
-    return -1;
-  }
-
-  _mh(d,hi,cp){
-    if(d.type==='trendline'){hi===0?(d.x1=cp.x,d.y1=cp.y):(d.x2=cp.x,d.y2=cp.y);}
-    else if(d.type==='path'){d.pts[hi]={...cp};}
-    else if(d.type==='rect'){
-      if(hi===0){d.x1=cp.x;d.y1=cp.y;} else if(hi===1){d.x2=cp.x;d.y1=cp.y;}
-      else if(hi===2){d.x2=cp.x;d.y2=cp.y;} else if(hi===3){d.x1=cp.x;d.y2=cp.y;}
-      else if(hi===4){d.y1=cp.y;} else if(hi===5){d.x2=cp.x;}
-      else if(hi===6){d.y2=cp.y;} else if(hi===7){d.x1=cp.x;}
-      else{const dx=cp.x-(d.x1+d.x2)/2,dy=cp.y-(d.y1+d.y2)/2;d.x1+=dx;d.x2+=dx;d.y1+=dy;d.y2+=dy;}
-    }
-  }
-
-  _tr(d,orig,dx,dy){
-    if(d.type==='trendline'){d.x1=orig.x1+dx;d.y1=orig.y1+dy;d.x2=orig.x2+dx;d.y2=orig.y2+dy;}
-    else if(d.type==='path'){d.pts=orig.pts.map(p=>({x:p.x+dx,y:p.y+dy}));}
-    else if(d.type==='rect'){d.x1=orig.x1+dx;d.y1=orig.y1+dy;d.x2=orig.x2+dx;d.y2=orig.y2+dy;}
-  }
-
-  _del(){if(!this.selId)return;this._ph();this.drawings=this.drawings.filter(x=>x.id!==this.selId);this.selId=null;this.fut=[];this.dirty();}
-  _ph(){this.hist.push(JSON.stringify(this.drawings));if(this.hist.length>60)this.hist.shift();}
-  undo(){if(!this.hist.length)return;this.fut.push(JSON.stringify(this.drawings));this.drawings=JSON.parse(this.hist.pop());this.selId=null;this.ds=null;this.dirty();}
-  redo(){if(!this.fut.length)return;this.hist.push(JSON.stringify(this.drawings));this.drawings=JSON.parse(this.fut.pop());this.selId=null;this.dirty();}
-  setTool(t){this.tool=t;this.ds=null;this.selId=null;this.dirty();}
-  setColor(c){this.color=c;if(this.selId){const d=this.drawings.find(x=>x.id===this.selId);if(d)d.color=c;}this.dirty();}
-  serialise(){return JSON.stringify(this.drawings);}
-  destroy(){cancelAnimationFrame(this._raf);window.removeEventListener('keydown',this._keyFn);}
-}
-
-// ── Chart registry ─────────────────────────────────────────────
-const DC={};
-function getChart(id){return DC[id]||null;}
-function makeChart(id,data){
-  if(DC[id]){DC[id].dirty();return DC[id];}
-  const cv=document.getElementById(id);if(!cv)return null;
-  const ch=new DrawingChart(cv,data);DC[id]=ch;return ch;
-}
-function killChart(id){if(DC[id]){DC[id].destroy();delete DC[id];}}
-
-// ── Toolbar ────────────────────────────────────────────────────
-const TICONS={
-  trendline:`<svg viewBox="0 0 22 22"><circle cx="3" cy="19" r="2.5" fill="currentColor" stroke="none"/><circle cx="19" cy="3" r="2.5" fill="currentColor" stroke="none"/><line x1="3" y1="19" x2="19" y2="3" stroke-width="1.6"/></svg>`,
-  path:`<svg viewBox="0 0 22 22"><circle cx="3" cy="19" r="2.5" fill="currentColor" stroke="none"/><circle cx="11" cy="7" r="2.5" fill="currentColor" stroke="none"/><circle cx="19" cy="14" r="2.5" fill="currentColor" stroke="none"/><polyline points="3,19 11,7 19,14" fill="none" stroke-width="1.6"/></svg>`,
-  rect:`<svg viewBox="0 0 22 22"><rect x="3" y="6" width="16" height="10" rx="1" fill="none" stroke-width="1.6"/><circle cx="3" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="19" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="19" cy="16" r="2" fill="currentColor" stroke="none"/><circle cx="3" cy="16" r="2" fill="currentColor" stroke="none"/></svg>`
-};
-const THINTS={
-  trendline:'Trendline — tap start point, then end point. Drag line or endpoints to adjust.',
-  path:'Path — tap to add points. Double-tap or press Enter to finish.',
-  rect:'Rectangle — tap first corner, tap opposite corner. Drag corners/edges/center.'
-};
-function tbHTML(cid,compact){
-  const s=compact?'style="width:30px;height:30px"':'';
-  const tb=(t,ic)=>`<button class="stb" ${s} id="ctb-${cid}-${t}" onclick="cTool('${cid}','${t}')" title="${t}">${ic}</button>`;
-  return `${tb('trendline',TICONS.trendline)}${tb('path',TICONS.path)}${tb('rect',TICONS.rect)}
-  <div class="stb-sep"></div>
-  <input type="color" class="s-cpick" value="#ef5350" oninput="cColor('${cid}',this.value)" title="Color">
-  <select class="s-wsel" onchange="cW('${cid}',+this.value)"><option value="1">1px</option><option value="2" selected>2px</option><option value="3">3px</option></select>
-  <select class="s-wsel" onchange="cLS('${cid}',this.value)"><option value="solid">——</option><option value="dashed">- -</option><option value="dotted">···</option></select>
-  <div class="stb-sep"></div>
-  <button class="stb" ${s} onclick="cUndo('${cid}')" title="Undo Ctrl+Z"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 8h10a6 6 0 0 1 0 12H5"/><polyline points="3,4 3,8 7,8"/></svg></button>
-  <button class="stb" ${s} onclick="cRedo('${cid}')" title="Redo Ctrl+Y"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M19 8H9a6 6 0 0 0 0 12h6"/><polyline points="19,4 19,8 15,8"/></svg></button>
-  <button class="stb" ${s} onclick="cDel('${cid}')" title="Delete selected"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="3,6 19,6"/><path d="M7 6V4h8v2M17 6l-1 13H6L5 6"/></svg></button>`;
-}
-function cTool(id,t){const ch=DC[id];if(!ch)return;ch.setTool(t);document.querySelectorAll(`[id^="ctb-${id}-"]`).forEach(b=>b.classList.remove('on'));document.getElementById(`ctb-${id}-${t}`)?.classList.add('on');const s=document.getElementById('cst-'+id);if(s)s.textContent=THINTS[t]||'';}
-function cColor(id,c){DC[id]?.setColor(c);}
-function cW(id,w){if(DC[id])DC[id].sw=w;}
-function cLS(id,s){if(DC[id])DC[id].ls=s;}
-function cUndo(id){DC[id]?.undo();}
-function cRedo(id){DC[id]?.redo();}
-function cDel(id){DC[id]?._del();}
-
-// ─── MAIN SKETCH TAB ─────────────────────────────────────────────
-function renderSketch(container, mode){
-  const cid='cm'+(sel?sel.id:0);
-  const data=sel?(sec==='concepts'?sel.concept_sketch:sel.sketch):null;
-  killChart(cid);
-  container.innerHTML=`<div class="sketch-wrap">
-    <div class="sketch-tb">${tbHTML(cid,false)}</div>
-    <canvas class="chart-canvas" id="${cid}"></canvas>
-    <div class="sketch-status" id="cst-${cid}">${THINTS.trendline}</div>
+Write it the way you understand it — not how a book explains it." oninput="sel.concept_notes=this.value">${esc(sel.concept_notes)}</textarea>
+    </div>
   </div>`;
-  requestAnimationFrame(()=>{
-    const ch=makeChart(cid,data);
-    if(ch){ch.setTool('trendline');document.getElementById(`ctb-${cid}-trendline`)?.classList.add('on');}
-  });
 }
-
 
 // ─── RULES ───────────────────────────────────────────────────────
 function renderRules(el){
   if(!sel.rules||!sel.rules.length)sel.rules=[{t:''},{t:''},{t:''}];
-  el.innerHTML=`<div class="rules-panel">
-    <div class="concept-card" style="background:var(--card)">
-      <div class="field-label" style="margin-bottom:8px">About this rule set</div>
-      <textarea class="rules-intro" style="width:100%;background:transparent;border:none;outline:none;color:var(--text2);font-size:13px;line-height:1.75;font-family:var(--sans);resize:none;min-height:40px" placeholder="What is the purpose of these rules? What behaviour are they enforcing?" oninput="sel.rules_intro=this.value">${esc(sel.rules_intro||'')}` + `</textarea>
+  el.innerHTML=`<div class="panel">
+    <div class="fcard">
+      <div class="flabel">About this rule set</div>
+      <textarea class="finput" style="min-height:36px" placeholder="What behaviour are these rules enforcing?" oninput="sel.rules_intro=this.value">${esc(sel.rules_intro||'')}</textarea>
     </div>
     <div id="rulesList"></div>
-    <button class="add-rule-btn" onclick="addRule()">
+    <button class="add-btn" onclick="addRule()">
       <svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
       Add rule
     </button>
@@ -995,102 +549,542 @@ function renderRules(el){
 function renderRuleRows(){
   const el=document.getElementById('rulesList');if(!el)return;
   el.innerHTML=sel.rules.map((r,i)=>`
-    <div class="rule-item">
+    <div class="rule-row">
       <div class="rule-num">${i+1}</div>
-      <textarea class="rule-inp" rows="1" placeholder="Write rule ${i+1}\u2026" oninput="sel.rules[${i}].t=this.value;autoResizeTA(this)" onfocus="autoResizeTA(this)">${esc(r.t||'')}` + `</textarea>
+      <textarea class="rule-inp" rows="1" placeholder="Write rule ${i+1}…" oninput="sel.rules[${i}].t=this.value;ar(this)" onfocus="ar(this)">${esc(r.t||'')}</textarea>
       <button class="rule-rm" onclick="removeRule(${i})"><svg viewBox="0 0 14 14"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg></button>
     </div>`).join('');
-  setTimeout(()=>document.querySelectorAll('.rule-inp').forEach(t=>autoResizeTA(t)),0);
+  setTimeout(()=>document.querySelectorAll('.rule-inp').forEach(t=>ar(t)),0);
 }
-function autoResizeTA(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
 function addRule(){sel.rules.push({t:''});renderRuleRows();}
 function removeRule(i){sel.rules.splice(i,1);renderRuleRows();}
 
 // ─── EXAMPLES ────────────────────────────────────────────────────
 function renderExamples(el){
   if(!sel.examples)sel.examples=[];
-  el.innerHTML=`<div class="examples-panel">
-    ${sel.examples.map((ex,i)=>exCard(ex,i)).join('')}
-    <button class="add-ex-btn" onclick="addExample()">
+  el.innerHTML=`<div class="panel">
+    ${sel.examples.map((ex,i)=>exCardHTML(ex,i)).join('')}
+    <button class="add-btn" onclick="addExample()">
       <svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
       Add example
     </button>
   </div>`;
-  sel.examples.forEach((_,i)=>initExCanvas(i));
+  sel.examples.forEach((_,i)=>initExSketch(i));
 }
 
-function exCard(ex,i){
-  const cid='ce'+(sel?sel.id:0)+'x'+i;
-  return`<div class="ex-card" id="excard-${i}">
-    <div class="ex-card-head">
-      <span class="ex-card-num">Example ${i+1}</span>
+function exCardHTML(ex,i){
+  const cid=`ec${sel.id}x${i}`;
+  return `<div class="ex-card" id="excard${i}">
+    <div class="ex-hd">
+      <span class="ex-num">Example ${i+1}</span>
       <button class="ex-del" onclick="removeExample(${i})"><svg viewBox="0 0 14 14"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg></button>
     </div>
     <div class="ex-body">
-      <textarea class="ex-desc" rows="3" placeholder="Describe what happened\u2014 what you saw, why it qualified, how it played out\u2026" oninput="sel.examples[${i}].desc=this.value">${esc(ex.desc||'')}` + `</textarea>
-      <div class="ex-sketch-area">
-        <div class="ex-sketch-tb">${tbHTML(cid,true)}</div>
-        <canvas class="ex-chart-canvas" id="${cid}"></canvas>
+      <textarea class="ex-desc" rows="2" placeholder="Describe this example — what you saw, why it qualified, how it played out…" oninput="sel.examples[${i}].desc=this.value">${esc(ex.desc||'')}</textarea>
+
+      <!-- Image upload -->
+      <div id="imgzone${i}">
+        ${ex.img
+          ? `<div style="position:relative">
+               <img src="${ex.img}" style="width:100%;border-radius:8px;display:block" alt="chart">
+               <div class="img-actions">
+                 <button class="img-action-btn" onclick="changeImg(${i})">Replace</button>
+                 <button class="img-action-btn" onclick="removeImg(${i})">Remove</button>
+               </div>
+             </div>`
+          : `<div class="img-zone" onclick="triggerImgUpload(${i})">
+               <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+               <div class="img-zone-label">Tap to upload chart screenshot</div>
+               <div class="img-zone-sub">From your phone gallery</div>
+             </div>`
+        }
+        <input type="file" accept="image/*" id="imgfile${i}" style="display:none" onchange="handleImg(${i},this)">
+      </div>
+
+      <!-- Mini sketch -->
+      <div class="ex-sketch-shell">
+        <div class="ex-stb" id="extb${cid}">${miniTbHTML(cid)}</div>
+        <canvas class="ex-canvas" id="${cid}"></canvas>
       </div>
     </div>
   </div>`;
 }
 
-function initExCanvas(i){
-  const cid='ce'+(sel?sel.id:0)+'x'+i;
-  killChart(cid);
-  const data=sel.examples[i]?.sketch||null;
-  requestAnimationFrame(()=>{
-    const ch=makeChart(cid,data);
-    if(ch){ch.setTool('trendline');document.getElementById(`ctb-${cid}-trendline`)?.classList.add('on');}
-  });
+// Image handling
+function triggerImgUpload(i){document.getElementById(`imgfile${i}`)?.click();}
+function changeImg(i){document.getElementById(`imgfile${i}`)?.click();}
+function removeImg(i){
+  sel.examples[i].img='';
+  renderExamples(document.getElementById('docBody'));
+}
+function handleImg(i,input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    sel.examples[i].img=e.target.result;
+    // re-render just the image zone
+    const zone=document.getElementById(`imgzone${i}`);
+    if(zone){
+      zone.innerHTML=`<div style="position:relative">
+        <img src="${sel.examples[i].img}" style="width:100%;border-radius:8px;display:block" alt="chart">
+        <div class="img-actions">
+          <button class="img-action-btn" onclick="changeImg(${i})">Replace</button>
+          <button class="img-action-btn" onclick="removeImg(${i})">Remove</button>
+        </div>
+      </div>
+      <input type="file" accept="image/*" id="imgfile${i}" style="display:none" onchange="handleImg(${i},this)">`;
+    }
+  };
+  reader.readAsDataURL(file);
 }
 
 function addExample(){
   if(!sel.examples)sel.examples=[];
-  sel.examples.push({desc:'',sketch:''});
+  sel.examples.push({desc:'',img:'',sketch:''});
   renderExamples(document.getElementById('docBody'));
 }
 function removeExample(i){
   if(!confirm('Remove this example?'))return;
-  const cid='ce'+(sel?sel.id:0)+'x'+i;
+  const cid=`ec${sel.id}x${i}`;
   killChart(cid);
   sel.examples.splice(i,1);
   renderExamples(document.getElementById('docBody'));
 }
 
+// ─── DRAWING ENGINE ──────────────────────────────────────────────
+// Canvas 2D — TradingView-style: Trendline, Path, Rectangle
+// All tools coexist on one canvas. Switch freely — nothing clears.
+// Drawings stored as JSON (chart coords), not pixel coords.
+
+const HR=12,VR=5,VH=13; // hit radius, visual radius, visual hit radius
+const SEL_C='#3b6ef0',GRID_C='rgba(15,23,42,.055)',CVS_BG='#fafbfc';
+
+class DChart{
+  constructor(cv,json){
+    this.cv=cv; this.ctx=cv.getContext('2d');
+    this.D=json?JSON.parse(json):[]; // drawings array
+    this.tool='trendline';
+    this.color='#ef5350'; this.sw=2; this.ls='solid';
+    this.selId=null; this.hoverId=null;
+    this.drag=null; this.ds=null; // draw state
+    this.hist=[]; this.fut=[];
+    this._dirty=true; this._raf=null;
+    this.vp={pMin:0,pMax:100,tMin:0,tMax:100};
+    this._resize(); this._bind(); this._loop();
+  }
+  get W(){return this.cv.width/(window.devicePixelRatio||1);}
+  get H(){return this.cv.height/(window.devicePixelRatio||1);}
+  get dW(){return this.W-52;} // leave space for price axis
+  get dH(){return this.H-18;} // leave space for time axis
+
+  // Coord transforms — drawings stored in 0-100 space
+  toPx(cx,cy){const v=this.vp;return{x:cx/100*this.dW,y:(1-cy/100)*this.dH};}
+  fromPx(px,py){return{x:px/this.dW*100,y:(1-py/this.dH)*100};}
+
+  _resize(){
+    const dpr=window.devicePixelRatio||1;
+    const r=this.cv.getBoundingClientRect();
+    if(!r.width)return;
+    this.cv.width=r.width*dpr; this.cv.height=r.height*dpr;
+    this.ctx.scale(dpr,dpr); this._dirty=true;
+  }
+  _loop(){this._raf=requestAnimationFrame(()=>this._loop());if(!this._dirty)return;this._dirty=false;this._render();}
+  mark(){this._dirty=true;}
+
+  _render(){
+    const ctx=this.ctx,W=this.W,H=this.H;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle=CVS_BG; ctx.fillRect(0,0,this.dW,this.dH);
+    this._grid();
+    ctx.save();ctx.beginPath();ctx.rect(0,0,this.dW,this.dH);ctx.clip();
+    this.D.forEach(d=>this._drawShape(d,d.id===this.selId,d.id===this.hoverId&&d.id!==this.selId));
+    if(this.ds)this._drawLive();
+    ctx.restore();
+    this._axes();
+  }
+
+  _grid(){
+    const ctx=this.ctx; ctx.strokeStyle=GRID_C; ctx.lineWidth=0.5;
+    for(let i=1;i<8;i++){const x=i/8*this.dW;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,this.dH);ctx.stroke();}
+    for(let i=1;i<6;i++){const y=i/6*this.dH;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(this.dW,y);ctx.stroke();}
+  }
+  _axes(){
+    const ctx=this.ctx;
+    ctx.fillStyle='#f0f2f6';
+    ctx.fillRect(this.dW,0,52,this.H); ctx.fillRect(0,this.dH,this.dW,18);
+    ctx.strokeStyle='rgba(15,23,42,.2)';ctx.lineWidth=0.5;ctx.setLineDash([]);
+    ctx.beginPath();ctx.moveTo(this.dW,0);ctx.lineTo(this.dW,this.dH);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,this.dH);ctx.lineTo(this.dW,this.dH);ctx.stroke();
+    ctx.fillStyle='rgba(15,23,42,.4)';ctx.font='9px monospace';ctx.textAlign='left';
+    for(let i=0;i<=5;i++){const y=this.dH-i/5*this.dH;ctx.fillText((i*20).toString(),this.dW+5,y+3);}
+    ctx.textAlign='center';
+    for(let i=0;i<=7;i++){ctx.fillText((i*100/7).toFixed(0),i/7*this.dW,this.dH+13);}
+  }
+
+  _stroke(ctx,color,w,ls,sel){
+    ctx.strokeStyle=sel?SEL_C:color; ctx.lineWidth=sel?w+1:w;
+    ctx.lineCap='round';ctx.lineJoin='round';
+    if(ls==='dashed')ctx.setLineDash([w*4,w*3]);
+    else if(ls==='dotted')ctx.setLineDash([w,w*2]);
+    else ctx.setLineDash([]);
+  }
+
+  _drawShape(d,sel,hov){
+    const ctx=this.ctx;
+    ctx.globalAlpha=hov?0.6:1;
+    if(d.type==='trendline'){
+      const p1=this.toPx(d.x1,d.y1),p2=this.toPx(d.x2,d.y2);
+      this._stroke(ctx,d.color,d.w,d.ls,sel);
+      ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();
+      ctx.setLineDash([]);
+      if(sel||hov){this._handle(p1.x,p1.y,sel);this._handle(p2.x,p2.y,sel);}
+    } else if(d.type==='path'){
+      if(d.pts.length<2){ctx.globalAlpha=1;return;}
+      this._stroke(ctx,d.color,d.w,d.ls,sel);
+      ctx.beginPath();
+      const p0=this.toPx(d.pts[0].x,d.pts[0].y);ctx.moveTo(p0.x,p0.y);
+      d.pts.slice(1).forEach(pt=>{const p=this.toPx(pt.x,pt.y);ctx.lineTo(p.x,p.y);});
+      ctx.stroke();ctx.setLineDash([]);
+      if(sel||hov)d.pts.forEach(pt=>{const p=this.toPx(pt.x,pt.y);this._handle(p.x,p.y,sel);});
+    } else if(d.type==='rect'){
+      const p1=this.toPx(d.x1,d.y1),p2=this.toPx(d.x2,d.y2);
+      const rx=Math.min(p1.x,p2.x),ry=Math.min(p1.y,p2.y),rw=Math.abs(p2.x-p1.x),rh=Math.abs(p2.y-p1.y);
+      ctx.fillStyle=d.color;ctx.globalAlpha*=0.09;ctx.fillRect(rx,ry,rw,rh);
+      ctx.globalAlpha=hov?0.6:1;
+      this._stroke(ctx,d.color,d.w,d.ls,sel);ctx.strokeRect(rx,ry,rw,rh);ctx.setLineDash([]);
+      if(sel||hov){
+        const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
+        [[p1.x,p1.y],[p2.x,p1.y],[p2.x,p2.y],[p1.x,p2.y],[mx,p1.y],[p2.x,my],[mx,p2.y],[p1.x,my],[mx,my]]
+        .forEach(([x,y])=>this._handle(x,y,sel));
+      }
+    }
+    ctx.globalAlpha=1;
+  }
+
+  _handle(x,y,sel){
+    const ctx=this.ctx;ctx.setLineDash([]);
+    ctx.beginPath();ctx.arc(x,y,VR,0,Math.PI*2);
+    ctx.fillStyle='#fff';ctx.fill();
+    ctx.strokeStyle=sel?SEL_C:'#6b7280';ctx.lineWidth=1.5;ctx.stroke();
+  }
+
+  _drawLive(){
+    const ds=this.ds,ctx=this.ctx;if(!ds||!ds.pts.length)return;
+    ctx.globalAlpha=0.72;
+    const fake={id:'__live',type:ds.tool,color:this.color,w:this.sw,ls:this.ls,
+      pts:ds.pts,x1:ds.pts[0].x,y1:ds.pts[0].y,
+      x2:(ds.pts[1]||ds.pts[0]).x,y2:(ds.pts[1]||ds.pts[0]).y};
+    this._drawShape(fake,false,false);
+    ctx.globalAlpha=1;
+  }
+
+  _bind(){
+    const cv=this.cv;
+    const gp=e=>{const r=cv.getBoundingClientRect();const s=e.touches?e.touches[0]:e;return{x:s.clientX-r.left,y:s.clientY-r.top};};
+    const gu=e=>{const r=cv.getBoundingClientRect();const s=e.changedTouches?e.changedTouches[0]:e;return{x:s.clientX-r.left,y:s.clientY-r.top};};
+    cv.addEventListener('mousedown',e=>{if(e.button===0)this._dn(gp(e));});
+    cv.addEventListener('mousemove',e=>this._mv(gp(e)));
+    cv.addEventListener('mouseup',e=>{if(e.button===0)this._up(gu(e));});
+    cv.addEventListener('dblclick',e=>this._dbl(gp(e)));
+    cv.addEventListener('touchstart',e=>{e.preventDefault();this._dn(gp(e));},{passive:false});
+    cv.addEventListener('touchmove',e=>{e.preventDefault();this._mv(gp(e));},{passive:false});
+    cv.addEventListener('touchend',e=>{e.preventDefault();this._up(gu(e));},{passive:false});
+    const ro=new ResizeObserver(()=>{this._resize();this.mark();});ro.observe(cv);
+    this._kfn=e=>{
+      if(!document.getElementById(cv.id))return;
+      if(e.key==='Escape'){this.ds=null;this.selId=null;this.mark();}
+      if(e.key==='Enter')this._finish();
+      if((e.key==='Delete'||e.key==='Backspace')&&this.selId&&document.activeElement===document.body)this._del();
+      if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();this.undo();}
+      if((e.ctrlKey||e.metaKey)&&(e.key==='y'||e.key==='Y')){e.preventDefault();this.redo();}
+    };
+    window.addEventListener('keydown',this._kfn);
+  }
+
+  _dn(p){
+    if(p.x>this.dW||p.y>this.dH)return;
+    // In-progress draw — add point
+    if(this.ds){this._click(p);return;}
+    // Hit handle on selected drawing?
+    if(this.selId){
+      const hi=this._hitHandle(this.selId,p);
+      if(hi!==-1){
+        this._ph();
+        const orig=JSON.parse(JSON.stringify(this.D.find(x=>x.id===this.selId)));
+        this.drag={t:'handle',id:this.selId,hi,orig,sp:this.fromPx(p.x,p.y)};
+        return;
+      }
+    }
+    // Hit any drawing body?
+    const hit=this._hitBody(p);
+    if(hit){
+      this.selId=hit.id;this._ph();
+      this.drag={t:'body',id:hit.id,orig:JSON.parse(JSON.stringify(hit)),sp:this.fromPx(p.x,p.y)};
+      this.mark();return;
+    }
+    // Start new drawing
+    this.selId=null;
+    const cp=this.fromPx(p.x,p.y);
+    if(this.tool==='trendline')this.ds={tool:'trendline',pts:[{...cp},{...cp}]};
+    else if(this.tool==='path')this.ds={tool:'path',pts:[{...cp},{...cp}]};
+    else if(this.tool==='rect')this.ds={tool:'rect',pts:[{...cp},{...cp}]};
+    this.mark();
+  }
+
+  _mv(p){
+    const cp=this.fromPx(p.x,p.y);
+    if(this.drag){
+      const d=this.D.find(x=>x.id===this.drag.id);
+      if(d){
+        if(this.drag.t==='handle')this._mh(d,this.drag.hi,cp);
+        else{const dx=cp.x-this.drag.sp.x,dy=cp.y-this.drag.sp.y;this._tr(d,this.drag.orig,dx,dy);}
+      }
+      this.mark();return;
+    }
+    if(this.ds){const pts=this.ds.pts;pts[pts.length-1]={...cp};this.mark();return;}
+    const hit=this._hitBody(p);
+    const nh=hit?hit.id:null;
+    if(nh!==this.hoverId){this.hoverId=nh;this.mark();}
+    this.cv.style.cursor=hit?'move':'crosshair';
+  }
+
+  _up(){if(this.drag){this.drag=null;this.fut=[];}}
+
+  _dbl(p){if(this.ds?.tool==='path')this._finish();}
+
+  _click(p){
+    const cp=this.fromPx(p.x,p.y),ds=this.ds;
+    if(ds.tool==='trendline'){ds.pts[1]={...cp};this._commit();}
+    else if(ds.tool==='rect'){ds.pts[1]={...cp};this._commit();}
+    else if(ds.tool==='path'){ds.pts[ds.pts.length-1]={...cp};ds.pts.push({...cp});}
+  }
+
+  _finish(){
+    if(!this.ds)return;
+    if(this.ds.tool==='path'&&this.ds.pts.length>2){this.ds.pts.pop();this._commit();}
+    else{this.ds=null;this.mark();}
+  }
+
+  _commit(){
+    const ds=this.ds;this._ph();
+    const id='d'+Date.now()+Math.random().toString(36).slice(2,5);
+    let d;
+    if(ds.tool==='trendline')d={id,type:'trendline',color:this.color,w:this.sw,ls:this.ls,x1:ds.pts[0].x,y1:ds.pts[0].y,x2:ds.pts[1].x,y2:ds.pts[1].y};
+    else if(ds.tool==='path')d={id,type:'path',color:this.color,w:this.sw,ls:this.ls,pts:[...ds.pts]};
+    else if(ds.tool==='rect')d={id,type:'rect',color:this.color,w:this.sw,ls:this.ls,x1:ds.pts[0].x,y1:ds.pts[0].y,x2:ds.pts[1].x,y2:ds.pts[1].y};
+    this.D.push(d);this.selId=id;this.ds=null;this.fut=[];this.mark();
+  }
+
+  _hitBody(p){
+    for(let i=this.D.length-1;i>=0;i--){
+      const d=this.D[i];
+      if(d.type==='trendline'){const p1=this.toPx(d.x1,d.y1),p2=this.toPx(d.x2,d.y2);if(this._ds(p,p1,p2)<HR)return d;}
+      else if(d.type==='path'){for(let j=0;j<d.pts.length-1;j++){const a=this.toPx(d.pts[j].x,d.pts[j].y),b=this.toPx(d.pts[j+1].x,d.pts[j+1].y);if(this._ds(p,a,b)<HR)return d;}}
+      else if(d.type==='rect'){const p1=this.toPx(d.x1,d.y1),p2=this.toPx(d.x2,d.y2);const rx=Math.min(p1.x,p2.x)-HR,ry=Math.min(p1.y,p2.y)-HR,rw=Math.abs(p2.x-p1.x)+HR*2,rh=Math.abs(p2.y-p1.y)+HR*2;if(p.x>=rx&&p.x<=rx+rw&&p.y>=ry&&p.y<=ry+rh)return d;}
+    }
+    return null;
+  }
+  _ds(p,a,b){const dx=b.x-a.x,dy=b.y-a.y;if(!dx&&!dy)return Math.hypot(p.x-a.x,p.y-a.y);const t=Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/(dx*dx+dy*dy)));return Math.hypot(p.x-(a.x+t*dx),p.y-(a.y+t*dy));}
+
+  _hitHandle(id,p){
+    const d=this.D.find(x=>x.id===id);if(!d)return -1;
+    const hs=d.type==='trendline'?[{x:d.x1,y:d.y1},{x:d.x2,y:d.y2}]:d.type==='path'?d.pts:
+      [{x:d.x1,y:d.y1},{x:d.x2,y:d.y1},{x:d.x2,y:d.y2},{x:d.x1,y:d.y2},
+       {x:(d.x1+d.x2)/2,y:d.y1},{x:d.x2,y:(d.y1+d.y2)/2},{x:(d.x1+d.x2)/2,y:d.y2},
+       {x:d.x1,y:(d.y1+d.y2)/2},{x:(d.x1+d.x2)/2,y:(d.y1+d.y2)/2}];
+    for(let i=0;i<hs.length;i++){const hp=this.toPx(hs[i].x,hs[i].y);if(Math.hypot(p.x-hp.x,p.y-hp.y)<VH)return i;}
+    return -1;
+  }
+
+  _mh(d,hi,cp){
+    if(d.type==='trendline'){hi===0?(d.x1=cp.x,d.y1=cp.y):(d.x2=cp.x,d.y2=cp.y);}
+    else if(d.type==='path'){d.pts[hi]={...cp};}
+    else if(d.type==='rect'){
+      if(hi===0){d.x1=cp.x;d.y1=cp.y;}else if(hi===1){d.x2=cp.x;d.y1=cp.y;}
+      else if(hi===2){d.x2=cp.x;d.y2=cp.y;}else if(hi===3){d.x1=cp.x;d.y2=cp.y;}
+      else if(hi===4){d.y1=cp.y;}else if(hi===5){d.x2=cp.x;}
+      else if(hi===6){d.y2=cp.y;}else if(hi===7){d.x1=cp.x;}
+      else{const dx=cp.x-(d.x1+d.x2)/2,dy=cp.y-(d.y1+d.y2)/2;d.x1+=dx;d.x2+=dx;d.y1+=dy;d.y2+=dy;}
+    }
+  }
+  _tr(d,o,dx,dy){
+    if(d.type==='trendline'){d.x1=o.x1+dx;d.y1=o.y1+dy;d.x2=o.x2+dx;d.y2=o.y2+dy;}
+    else if(d.type==='path'){d.pts=o.pts.map(p=>({x:p.x+dx,y:p.y+dy}));}
+    else if(d.type==='rect'){d.x1=o.x1+dx;d.y1=o.y1+dy;d.x2=o.x2+dx;d.y2=o.y2+dy;}
+  }
+  _del(){if(!this.selId)return;this._ph();this.D=this.D.filter(x=>x.id!==this.selId);this.selId=null;this.fut=[];this.mark();}
+  _ph(){this.hist.push(JSON.stringify(this.D));if(this.hist.length>60)this.hist.shift();}
+  undo(){if(!this.hist.length)return;this.fut.push(JSON.stringify(this.D));this.D=JSON.parse(this.hist.pop());this.selId=null;this.ds=null;this.mark();}
+  redo(){if(!this.fut.length)return;this.hist.push(JSON.stringify(this.D));this.D=JSON.parse(this.fut.pop());this.selId=null;this.mark();}
+  setTool(t){this.tool=t;this.ds=null;this.mark();}
+  setColor(c){this.color=c;if(this.selId){const d=this.D.find(x=>x.id===this.selId);if(d)d.color=c;}this.mark();}
+  serialise(){return JSON.stringify(this.D);}
+  destroy(){cancelAnimationFrame(this._raf);window.removeEventListener('keydown',this._kfn);}
+}
+
+// Chart registry — keyed by canvas id
+const DC={};
+function makeChart(id,data){if(DC[id])return DC[id];const cv=document.getElementById(id);if(!cv)return null;const ch=new DChart(cv,data);DC[id]=ch;return ch;}
+function killChart(id){if(DC[id]){DC[id].destroy();delete DC[id];}}
+function getChart(id){return DC[id]||null;}
+
+// ── Toolbar HTML ──────────────────────────────────────────────────
+const TICONS={
+  trendline:`<svg viewBox="0 0 22 22"><circle cx="3" cy="19" r="2.5" fill="currentColor" stroke="none"/><circle cx="19" cy="3" r="2.5" fill="currentColor" stroke="none"/><line x1="3" y1="19" x2="19" y2="3" stroke-width="1.7"/></svg>`,
+  path:`<svg viewBox="0 0 22 22"><circle cx="3" cy="19" r="2.5" fill="currentColor" stroke="none"/><circle cx="11" cy="7" r="2.5" fill="currentColor" stroke="none"/><circle cx="19" cy="14" r="2.5" fill="currentColor" stroke="none"/><polyline points="3,19 11,7 19,14" fill="none" stroke-width="1.7"/></svg>`,
+  rect:`<svg viewBox="0 0 22 22"><rect x="3" y="5" width="16" height="12" rx="1" fill="none" stroke-width="1.7"/><circle cx="3" cy="5" r="2" fill="currentColor" stroke="none"/><circle cx="19" cy="5" r="2" fill="currentColor" stroke="none"/><circle cx="19" cy="17" r="2" fill="currentColor" stroke="none"/><circle cx="3" cy="17" r="2" fill="currentColor" stroke="none"/></svg>`
+};
+const THINTS={
+  trendline:'Tap to place start → tap to place end. Drag endpoints or line to adjust.',
+  path:'Tap to add points. Double-tap or press Enter to finish. Drag any point.',
+  rect:'Tap first corner → tap second corner. Drag handles to resize.'
+};
+
+function tbHTML(cid,compact){
+  const s=compact?'style="width:30px;height:30px;border-radius:7px"':'';
+  const btn=(t)=>`<button class="stb" ${s} id="tb${cid}${t}" onclick="cTool('${cid}','${t}')" title="${t}">${TICONS[t]}</button>`;
+  return `${btn('trendline')}${btn('path')}${btn('rect')}
+    <div class="stb-sep"></div>
+    <input type="color" class="cpick" value="#ef5350" oninput="cColor('${cid}',this.value)" title="Color">
+    <select class="swsel" onchange="cW('${cid}',+this.value)"><option value="1">1px</option><option value="2" selected>2px</option><option value="3">3px</option></select>
+    <select class="swsel" onchange="cLS('${cid}',this.value)"><option value="solid">——</option><option value="dashed">- -</option><option value="dotted">···</option></select>
+    <div class="stb-sep"></div>
+    <button class="stb" ${s} onclick="cUndo('${cid}')" title="Undo Ctrl+Z"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 8h10a6 6 0 0 1 0 12H5"/><polyline points="3,4 3,8 7,8"/></svg></button>
+    <button class="stb" ${s} onclick="cRedo('${cid}')" title="Redo"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M19 8H9a6 6 0 0 0 0 12h6"/><polyline points="19,4 19,8 15,8"/></svg></button>
+    <button class="stb" ${s} onclick="cDel('${cid}')" title="Delete selected"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="3,6 19,6"/><path d="M7 6V4h8v2M17 6l-1 13H6L5 6"/></svg></button>`;
+}
+// Compact toolbar for examples (same tools, smaller buttons)
+function miniTbHTML(cid){return tbHTML(cid,true);}
+
+// Global tool functions
+function cTool(id,t){
+  const ch=DC[id];if(!ch)return;
+  ch.setTool(t);
+  ['trendline','path','rect'].forEach(x=>{document.getElementById('tb'+id+x)?.classList.toggle('on',x===t);});
+  const h=document.getElementById('hint'+id);if(h)h.textContent=THINTS[t]||'';
+}
+function cColor(id,c){DC[id]?.setColor(c);}
+function cW(id,w){if(DC[id])DC[id].sw=w;}
+function cLS(id,s){if(DC[id])DC[id].ls=s;}
+function cUndo(id){DC[id]?.undo();}
+function cRedo(id){DC[id]?.redo();}
+function cDel(id){DC[id]?._del();}
+
+// ── Main sketch tab ───────────────────────────────────────────────
+function renderSketch(el){
+  const cid='cm'+sel.id;
+  const data=sec==='concepts'?sel.concept_sketch:sel.sketch;
+  killChart(cid);
+  el.innerHTML=`<div class="sketch-shell">
+    <div class="sketch-tb">${tbHTML(cid,false)}</div>
+    <canvas class="draw-canvas" id="${cid}"></canvas>
+    <div class="sketch-hint" id="hint${cid}">${THINTS.trendline}</div>
+  </div>`;
+  requestAnimationFrame(()=>{
+    const ch=makeChart(cid,data);
+    if(ch){ch.setTool('trendline');document.getElementById('tb'+cid+'trendline')?.classList.add('on');}
+  });
+}
+
+// Capture sketch before leaving tab
+function captureSketch(){
+  if(!sel)return;
+  const cid='cm'+sel.id;
+  const ch=DC[cid];if(!ch)return;
+  if(sec==='concepts')sel.concept_sketch=ch.serialise();
+  else sel.sketch=ch.serialise();
+}
+
+// ── Example sketches ──────────────────────────────────────────────
+function initExSketch(i){
+  const cid=`ec${sel.id}x${i}`;
+  killChart(cid);
+  const data=sel.examples[i]?.sketch||null;
+  requestAnimationFrame(()=>{
+    const ch=makeChart(cid,data);
+    if(ch){ch.setTool('trendline');document.getElementById('tb'+cid+'trendline')?.classList.add('on');}
+  });
+}
+
 // ─── SAVE ────────────────────────────────────────────────────────
 async function saveEntry(){
   if(!sel)return;
-  const ct=activeDocTab[sec];
-  // capture main sketch
-  if(ct==='sketch'){
-    const cid='cm'+sel.id;
-    const ch=DC[cid];
-    if(ch){
-      if(sec==='concepts')sel.concept_sketch=ch.serialise();
-      else sel.sketch=ch.serialise();
-    }
+
+  // Always capture main sketch (whether on sketch tab or not)
+  const mainCid='cm'+sel.id;
+  const mainCh=DC[mainCid];
+  if(mainCh){
+    if(sec==='concepts')sel.concept_sketch=mainCh.serialise();
+    else sel.sketch=mainCh.serialise();
   }
-  // always capture example sketches
+  // Also capture if currently on sketch tab (belt + suspenders)
+  if(docTab[sec]==='sketch')captureSketch();
+
+  // Capture all example sketches
   if(sel.examples){
     sel.examples.forEach((ex,i)=>{
-      const cid='ce'+sel.id+'x'+i;
+      const cid=`ec${sel.id}x${i}`;
       const ch=DC[cid];
       if(ch)ex.sketch=ch.serialise();
     });
   }
+
   const idx=store[sec].findIndex(x=>x.id===sel.id);
   if(idx>=0)store[sec][idx]=sel;
   await persist();
   renderList();
-  toast('Saved');
+  toast('Saved ✓');
 }
 
+// ─── PWA INSTALL ─────────────────────────────────────────────────
+let _installPrompt = null;
 
-// Service worker for offline
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _installPrompt = e;
+  // Show banner after 3s if not already installed
+  setTimeout(() => {
+    if (!window.matchMedia('(display-mode: standalone)').matches) {
+      document.getElementById('installBar')?.classList.add('show');
+    }
+  }, 3000);
+});
+
+async function triggerInstall() {
+  if (!_installPrompt) return;
+  _installPrompt.prompt();
+  const { outcome } = await _installPrompt.userChoice;
+  if (outcome === 'accepted') {
+    document.getElementById('installBar')?.classList.remove('show');
+    toast('App installed! Find it on your home screen.');
+  }
+  _installPrompt = null;
+}
+
+function dismissInstall() {
+  document.getElementById('installBar')?.classList.remove('show');
+  sessionStorage.setItem('install-dismissed', '1');
+}
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installBar')?.classList.remove('show');
+});
+
+// Hide banner if already in standalone mode
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  document.getElementById('installBar')?.classList.remove('show');
+}
+
+// ─── SERVICE WORKER ───────────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(reg => {
+        // Check for updates every 60s
+        setInterval(() => reg.update(), 60000);
+      })
+      .catch(() => {});
+  });
 }
 
 init();

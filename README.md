@@ -1,53 +1,43 @@
-# Trading Knowledge Base — Android App
+# Trading Knowledge Base
 
-A personal trading knowledge base for documenting and refining your models,
-concepts, and rules. Built to be re-read every day.
+A personal trading system documentation app. Document your models, concepts, and rules. Works fully offline.
 
-## Three sections
+## Install on your phone
 
-- **Models** — each model has: description, market structure required, entry trigger,
-  confluences, SL/TP logic, invalidation, a hand-drawn sketch, and real trade examples
-  (each with its own sketch + written breakdown).
-- **Concepts** — foundational ideas that underpin your models, in your own words.
-- **Rules** — ordered rule sets you can re-read and refine over time.
+1. Push this repo to GitHub
+2. Go to repo **Settings → Pages → Source → GitHub Actions**
+3. Wait ~1 minute for the deploy to finish
+4. Open `https://YOUR_USERNAME.github.io/REPO_NAME` on your phone in Chrome
+5. Tap the banner **"Install Trading KB"** that appears after a few seconds — or tap Chrome menu → **Add to Home Screen**
+6. Done. The app icon appears on your home screen and works offline.
 
-## Data storage
+## What's inside
 
-Everything is stored locally on the device via IndexedDB inside the app's WebView.
-Nothing is sent anywhere. Fully offline.
+- **Models** — document setups with description, market structure, entry trigger, confluences, SL/TP, invalidation, sketch canvas, and real trade examples with chart screenshots
+- **Concepts** — foundational ideas in your own words + sketch
+- **Rules** — numbered rule sets you refine over time
 
-## Build the APK
+## Deploy steps (first time)
 
-### Option A — Android Studio (easiest, free)
-1. Download and install [Android Studio](https://developer.android.com/studio).
-2. Open Android Studio → Open → select the `android/` folder in this project.
-3. Wait for Gradle to sync (downloads SDK automatically on first run).
-4. **Build → Generate Signed Bundle / APK → APK → debug** to produce an installable
-   APK you can sideload onto your phone.
-   Or just click ▶ Run to install directly on a connected device.
-
-### Option B — Command line
 ```bash
-npm install
-npx cap sync android
-cd android
-./gradlew assembleDebug
-# Output: android/app/build/outputs/apk/debug/app-debug.apk
+cd knowledgebase
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/YOUR_USERNAME/trading-kb.git
+git push -u origin main
 ```
 
-### Option C — Cloud build (no local setup)
-Push this project to GitHub and use [Codemagic](https://codemagic.io) (free tier)
-to build the APK in the cloud and download it.
+Then in GitHub: Settings → Pages → Source → **GitHub Actions**
 
-## Making changes
+## Local testing
 
-Edit `www/index.html` then run:
 ```bash
-npx cap copy android
+cd www
+npx serve .
+# Open http://localhost:3000 in Chrome
 ```
-before rebuilding.
 
-## App info
-- App name: Trading KB
-- Package: com.caleb.tradingknowledgebase
-- Min Android: 7.0 (API 24)
+## Data
+
+All data is stored locally on your device using IndexedDB. Nothing is sent to any server.
